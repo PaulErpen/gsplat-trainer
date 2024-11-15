@@ -1,7 +1,7 @@
 
 from pathlib import Path
 from typing import NamedTuple
-from gsplat_trainer.colors.colors import SH2RGB
+from gsplat_trainer.colors.colors import sh_to_rgb
 import numpy as np
 from plyfile import PlyData, PlyElement
 
@@ -29,9 +29,9 @@ class BasicPointCloud(NamedTuple):
       # We create random points inside the bounds of the synthetic Blender scenes
       xyz = np.random.random((num_points, 3)) * 2.6 - 1.3
       shs = np.random.random((num_points, 3)) / 255.0
-      pcd = cls(points=xyz, colors=SH2RGB(shs), normals=np.zeros((num_points, 3)))
+      pcd = cls(points=xyz, colors=sh_to_rgb(shs), normals=np.zeros((num_points, 3)))
 
-      BasicPointCloud.storePly(ply_path, xyz, SH2RGB(shs) * 255)
+      BasicPointCloud.storePly(ply_path, xyz, sh_to_rgb(shs) * 255)
     else:
       pcd = BasicPointCloud.fetchPly(ply_path)
 
