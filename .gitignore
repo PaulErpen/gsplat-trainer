@@ -1,0 +1,4 @@
+.vscode
+.pytest_cache
+**/__pycache__/**
+gsplat_trainer/gsplat_trainer.egg-info
