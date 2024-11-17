@@ -14,7 +14,7 @@ class SchedulerFactoryTest(unittest.TestCase):
             "means": optim.Adam(
                 [
                     {
-                        "params": torch.nn.Parameter(torch.rand((100,))),
+                        "params": torch.nn.Parameter(torch.rand((20,))),
                         "lr": 1.0,
                         "name": "means",
                     }

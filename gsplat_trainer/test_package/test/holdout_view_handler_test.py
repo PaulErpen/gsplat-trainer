@@ -32,8 +32,8 @@ class HoldoutviewHandlerTest(unittest.TestCase):
         holdout_view_handler = HoldoutViewHandler(
             torch.eye(4),
             torch.eye(3),
-            800,
-            800,
+            128,
+            128,
             bg_color=torch.rand(3),
             out_dir="unittests/test-renders",
             device="cpu",

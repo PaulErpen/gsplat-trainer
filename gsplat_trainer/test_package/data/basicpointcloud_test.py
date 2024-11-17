@@ -7,7 +7,7 @@ from gsplat_trainer.data.basicpointcloud import BasicPointCloud
 class BasicPointcloudTest(unittest.TestCase):
     def setUp(self):
         self.dataset_path = "./tmp/dataset"
-        self.num_points = 100
+        self.num_points = 10
 
         os.makedirs(self.dataset_path)
 

@@ -8,7 +8,7 @@ import torch
 
 class OptimizerFactoryTest(unittest.TestCase):
     def setUp(self):
-        N = 100
+        N = 20
         self.gaussian_model = GaussianModel(
             params=nn.ParameterDict(
                 {
