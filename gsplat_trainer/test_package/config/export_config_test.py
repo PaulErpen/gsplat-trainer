@@ -3,7 +3,7 @@ import shutil
 import unittest
 
 from gsplat_trainer.config.config import Config
-from gsplat_trainer.pipeline.export_config import export_configs
+from gsplat_trainer.config.export_config import export_configs
 from gsplat_trainer.train.strategy.strategy_wrapper import Strategy
 
 
