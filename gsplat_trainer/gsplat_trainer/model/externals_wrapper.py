@@ -37,26 +37,27 @@ def mocked_rasterization(
     backgrounds=torch.Tensor,
 ) -> Tuple[torch.Tensor, torch.Tensor, Dict]:
     B = Ks.shape[0]
+    N = means.shape[0]
     return (
         torch.rand(B, height, width, 3),
         torch.rand(B, height, width),
         {
-            "camera_ids": [],
-            "gaussian_ids": [],
-            "radii": [],
-            "means2d": [],
-            "depths": [],
-            "conics": [],
-            "opacities": [],
-            "tile_width": [],
-            "tile_height": [],
-            "tiles_per_gauss": [],
-            "isect_ids": [],
-            "flatten_ids": [],
-            "isect_offsets": [],
-            "width": [],
-            "height": [],
-            "tile_size": [],
+            "camera_ids": torch.tensor([], requires_grad=True),
+            "gaussian_ids": torch.tensor([], requires_grad=True),
+            "radii": torch.tensor([], requires_grad=True),
+            "means2d": torch.tensor([], requires_grad=True),
+            "depths": torch.tensor([], requires_grad=True),
+            "conics": torch.tensor([], requires_grad=True),
+            "opacities": torch.tensor([], requires_grad=True),
+            "tile_width": torch.tensor([], requires_grad=True),
+            "tile_height": torch.tensor([], requires_grad=True),
+            "tiles_per_gauss": torch.tensor([], requires_grad=True),
+            "isect_ids": torch.tensor([], requires_grad=True),
+            "flatten_ids": torch.tensor([], requires_grad=True),
+            "isect_offsets": torch.tensor([], requires_grad=True),
+            "width": torch.tensor([], requires_grad=True),
+            "height": torch.tensor([], requires_grad=True),
+            "tile_size": torch.tensor([], requires_grad=True),
         },
     )
 

@@ -22,6 +22,7 @@ class ValidationHandlerTest(unittest.TestCase):
             self.n_pdc_points
         )
         self.bg = torch.ones(3)
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
 
     def test_given_only_a_train_dataset__when_intializing_the_validation_handler__then_it_must_only_contain_a_single_validation_config(
         self,
@@ -30,9 +31,7 @@ class ValidationHandlerTest(unittest.TestCase):
             train_dataset=self.train_dataset,
             test_dataset=None,
             test_iterations=[1000],
-            device="cpu",
-            W=self.W,
-            H=self.H,
+            device=self.device,
             bg_color=self.bg,
             sh_degree_interval=1000,
             logger=None,
@@ -47,9 +46,7 @@ class ValidationHandlerTest(unittest.TestCase):
             train_dataset=self.train_dataset,
             test_dataset=self.test_dataset,
             test_iterations=[1000],
-            device="cpu",
-            W=self.W,
-            H=self.H,
+            device=self.device,
             bg_color=self.bg,
             sh_degree_interval=1000,
             logger=None,
@@ -65,9 +62,7 @@ class ValidationHandlerTest(unittest.TestCase):
             train_dataset=self.train_dataset,
             test_dataset=self.test_dataset,
             test_iterations=[1000],
-            device="cpu",
-            W=self.W,
-            H=self.H,
+            device=self.device,
             bg_color=self.bg,
             sh_degree_interval=1000,
             logger=logger,
@@ -76,7 +71,7 @@ class ValidationHandlerTest(unittest.TestCase):
         validation_handler.handle_validation(self.gaussian_model, 1000)
 
         self.assertEqual(len(logger.logger_backend.calls), 2)
-    
+
     def test_given_a_logger_and_one_dataset__when_calling_the_validation_method_with_the_correct_step__then_the_logger_must_have_been_called_once(
         self,
     ) -> None:
@@ -85,9 +80,7 @@ class ValidationHandlerTest(unittest.TestCase):
             train_dataset=self.train_dataset,
             test_dataset=None,
             test_iterations=[1000],
-            device="cpu",
-            W=self.W,
-            H=self.H,
+            device=self.device,
             bg_color=self.bg,
             sh_degree_interval=1000,
             logger=logger,

@@ -15,8 +15,6 @@ class ValidationHandler:
         test_dataset: Optional[NVSDataset],
         test_iterations: List[int],
         device: str,
-        W: int,
-        H: int,
         bg_color: torch.Tensor,
         sh_degree_interval: int,
         logger: Optional[Logger] = None,
@@ -26,8 +24,6 @@ class ValidationHandler:
         self.test_iterations = test_iterations
         self.logger = logger
         self.device = device
-        self.W = W
-        self.H = H
         self.sh_degree_interval = sh_degree_interval
         self.bg_color = bg_color
 
@@ -69,11 +65,12 @@ class ValidationHandler:
                         step // self.sh_degree_interval, gaussian_model.sh_degree
                     )
 
+                    H, W, _ = gt_image.shape
                     renders, alphas, info = gaussian_model(
                         view_matrix=viewmat.unsqueeze(0).to(self.device),
                         K=K.unsqueeze(0).to(self.device),
-                        W=self.W,
-                        H=self.H,
+                        W=W,
+                        H=H,
                         sh_degree_to_use=sh_degree_to_use,
                         bg_color=self.bg_color.unsqueeze(0).to(self.device),
                     )
