@@ -5,8 +5,8 @@ from gsplat_trainer.train.optimizer_factory import OptimizerFactory
 from gsplat_trainer.train.scheduler_factory import SchedulerFactory
 from gsplat_trainer.train.simple_trainer import SimpleTrainer
 from gsplat_trainer.train.strategy.strategy_wrapper import Strategy
+from test_package.mocks.mock_factory import MockFactory
 import torch
-from ..mocks.mock_factory import MockFactory
 
 
 class SimpleTrainerTest(unittest.TestCase):

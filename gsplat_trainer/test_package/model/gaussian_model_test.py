@@ -1,6 +1,6 @@
 import unittest
+from test_package.mocks.mock_factory import MockFactory
 import torch
-from ..mocks.mock_factory import MockFactory
 
 
 class GaussianModelTest(unittest.TestCase):
