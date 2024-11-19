@@ -7,13 +7,14 @@ from gsplat_trainer.data.blender.blender_util import (
     image_path_to_tensors,
     transform_matrix_to_w2c,
 )
+from gsplat_trainer.data.dataset_factory import DatasetFactory
 from gsplat_trainer.data.nerfnorm import NerfNorm
 import torch
 from gsplat_trainer.data.nvs_dataset import NVSDataset
 import numpy as np
 
 
-class BlenderSyntheticDatasetFactory:
+class BlenderSyntheticDatasetFactory(DatasetFactory):
     def __init__(
         self,
         data_root: str,
