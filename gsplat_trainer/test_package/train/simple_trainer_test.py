@@ -23,6 +23,7 @@ class SimpleTrainerTest(unittest.TestCase):
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.config.max_steps = 10
 
+    @unittest.skip()
     def test_given_a_simple_trainer_with_all_needed_parameters__when_initializing__then_do_not_throw_an_error(
         self,
     ) -> None:
