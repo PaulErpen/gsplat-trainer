@@ -15,6 +15,14 @@ class GaussianModelTest(unittest.TestCase):
         self.gaussian_model = MockFactory.create_mocked_gaussian_model(
             n_points=self.pdc_points
         ).to(self.device)
+    
+    def test_given_a_valid_gaussian_model__when_moving_to_a_device__the_model_parameters_must_be_on_that_device(self) -> None:
+        self.assertTrue(str(self.gaussian_model.params["means"].device) == self.device)
+        self.assertTrue(str(self.gaussian_model.params["quats"].device) == self.device)
+        self.assertTrue(str(self.gaussian_model.params["scales"].device) == self.device)
+        self.assertTrue(str(self.gaussian_model.params["opacities"].device) == self.device)
+        self.assertTrue(str(self.gaussian_model.params["sh0"].device) == self.device)
+        self.assertTrue(str(self.gaussian_model.params["shN"].device) == self.device)
 
     def test_given_a_valid_gaussian_model__when_forwarding_with_camera_parameters__then_do_not_throw_an_error(
         self,
