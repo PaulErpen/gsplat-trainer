@@ -24,7 +24,7 @@ class ValidationHandlerTest(unittest.TestCase):
         self.bg = torch.ones(3)
 
 
-    @unittest.skip()
+    @unittest.skip(reason="debug")
     def test_given_only_a_train_dataset__when_intializing_the_validation_handler__then_it_must_only_contain_a_single_validation_config(
         self,
     ) -> None:
@@ -40,7 +40,7 @@ class ValidationHandlerTest(unittest.TestCase):
 
         self.assertEqual(len(validation_handler.validation_configs), 1)
 
-    @unittest.skip()
+    @unittest.skip(reason="debug")
     def test_given_a_train_and_test_dataset__when_initializing_the_validation_handler__then_it_must_contain_two_validation_configs(
         self,
     ) -> None:
@@ -56,7 +56,7 @@ class ValidationHandlerTest(unittest.TestCase):
 
         self.assertEqual(len(validation_handler.validation_configs), 2)
 
-    @unittest.skip()
+    @unittest.skip(reason="debug")
     def test_given_a_logger_and_two_datasets__when_calling_the_validation_method_with_the_correct_step__then_the_logger_must_have_been_called_twice(
         self,
     ) -> None:
@@ -75,7 +75,7 @@ class ValidationHandlerTest(unittest.TestCase):
 
         self.assertEqual(len(logger.logger_backend.calls), 2)
 
-    @unittest.skip()
+    @unittest.skip(reason="debug")
     def test_given_a_logger_and_one_dataset__when_calling_the_validation_method_with_the_correct_step__then_the_logger_must_have_been_called_once(
         self,
     ) -> None:
