@@ -16,7 +16,7 @@ class GaussianModelTest(unittest.TestCase):
             n_points=self.pdc_points
         ).to(self.device)
     
-    def test_given_a_valid_gaussian_model__when_moving_to_a_device__the_model_parameters_must_be_on_that_device(self) -> None:
+    def test_0_given_a_valid_gaussian_model__when_moving_to_a_device__the_model_parameters_must_be_on_that_device(self) -> None:
         self.assertTrue(str(self.gaussian_model.params["means"].device) == self.device)
         self.assertTrue(str(self.gaussian_model.params["quats"].device) == self.device)
         self.assertTrue(str(self.gaussian_model.params["scales"].device) == self.device)
