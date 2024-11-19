@@ -15,7 +15,6 @@ setup(
         "plyfile>=1.1",
         "pillow>=11.0.0",
         "torchvision>=0.20.1",
-        "matplotlib>=3.8.0",
-        "toml==0.10.2"
+        "matplotlib>=3.8.0"
     ],
 )

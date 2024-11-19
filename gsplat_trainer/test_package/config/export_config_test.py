@@ -20,7 +20,7 @@ class ExportConfigTest(unittest.TestCase):
             out_dir=self.export_path, config=self.config, strategy=self.strategy
         )
 
-        self.assertTrue(Path(f"{self.export_path}/config.toml").exists())
+        self.assertTrue(Path(f"{self.export_path}/config.json").exists())
 
     def tearDown(self) -> None:
         shutil.rmtree(self.export_path)
