@@ -5,6 +5,7 @@ import torch
 
 class GaussianModelTest(unittest.TestCase):
     def setUp(self) -> None:
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.N = 10
         self.pdc_points = 40
         self.H, self.W = 128, 128
@@ -13,7 +14,7 @@ class GaussianModelTest(unittest.TestCase):
         )
         self.gaussian_model = MockFactory.create_mocked_gaussian_model(
             n_points=self.pdc_points
-        )
+        ).to(self.device)
 
     def test_given_a_valid_gaussian_model__when_forwarding_with_camera_parameters__then_return_a_meta_dictionary_with_the_correct_keys(
         self,
