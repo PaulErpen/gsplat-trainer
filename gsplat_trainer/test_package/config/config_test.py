@@ -20,13 +20,30 @@ class ConfigTest(unittest.TestCase):
     def test_given_all_required_arguments__when_parsing_the_config_from_args__then_raise_no_error(
         self,
     ) -> None:
-        Config.from_cli_args(["--dataset_path", "hello", "--output_path", "hello"])
+        Config.from_cli_args(
+            [
+                "--dataset_path",
+                "hello",
+                "--output_path",
+                "hello",
+                "--run_name",
+                "run_name_1",
+            ]
+        )
 
     def test_given_the_white_bg_arg__when_parsing_the_config_from_args__the_config_bg_must_be_white(
         self,
     ) -> None:
         config = Config.from_cli_args(
-            ["--dataset_path", "hello", "--output_path", "hello", "--white_background"]
+            [
+                "--dataset_path",
+                "hello",
+                "--output_path",
+                "hello",
+                "--run_name",
+                "run_name_1",
+                "--white_background",
+            ]
         )
 
         self.assertTrue(torch.equal(config.bg_color, torch.ones((3,))))
@@ -35,7 +52,14 @@ class ConfigTest(unittest.TestCase):
         self,
     ) -> None:
         config = Config.from_cli_args(
-            ["--dataset_path", "hello", "--output_path", "hello"]
+            [
+                "--dataset_path",
+                "hello",
+                "--output_path",
+                "hello",
+                "--run_name",
+                "run_name_1",
+            ]
         )
 
         self.assertTrue(torch.equal(config.bg_color, torch.zeros((3,))))
