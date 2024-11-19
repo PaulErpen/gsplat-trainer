@@ -2,7 +2,7 @@ import unittest
 import os
 from pathlib import Path
 
-from gsplat_trainer.io.ply_handling import load_ply, save_ply
+from gsplat_trainer.model_io.ply_handling import load_ply, save_ply
 from test_package.mocks.mock_factory import MockFactory
 
 

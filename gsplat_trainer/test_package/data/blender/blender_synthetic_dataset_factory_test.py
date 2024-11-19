@@ -11,7 +11,7 @@ import numpy as np
 class BlenderSyntheticDatasetFactoryTest(unittest.TestCase):
     def setUp(self):
         self.dataset_factory = BlenderSyntheticDatasetFactory(
-            data_root=f"{os.getcwd()}/mocked_datasets/lego",
+            data_root=f"{os.getcwd()}/../mocked_datasets/lego",
             splits=["train"],
             max_num_init_points=100,
         )
@@ -53,7 +53,7 @@ class BlenderSyntheticDatasetFactoryTest(unittest.TestCase):
         self.assertEqual(dataset.pcd.colors.shape[0], 100)
         self.assertEqual(dataset.pcd.normals.shape[0], 100)
 
-    def test_given_a_dataset__when_getting_the_split__then_the_norm_should_have_legitimae_values(
+    def test_given_a_dataset__when_getting_the_split__then_the_norm_should_have_legitimate_values(
         self,
     ) -> None:
         dataset: NVSDataset = self.dataset_factory.get_split("train")
