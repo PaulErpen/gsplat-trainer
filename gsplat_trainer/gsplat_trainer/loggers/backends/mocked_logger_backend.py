@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import Dict, List
-from gsplat_trainer.logging.backends.logger_backend import LoggerBackend
+from gsplat_trainer.loggers.backends.logger_backend import LoggerBackend
 
 
 @dataclass

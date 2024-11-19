@@ -1,6 +1,6 @@
 import unittest
 
-from gsplat_trainer.logging.logger_factory import LoggerFactory
+from gsplat_trainer.loggers.logger_factory import LoggerFactory
 from gsplat_trainer.test.validation_handler import ValidationHandler
 from test_package.mocks.mock_factory import MockFactory
 import torch

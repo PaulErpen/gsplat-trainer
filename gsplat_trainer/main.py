@@ -5,8 +5,8 @@ from gsplat_trainer.config.export_config import export_configs
 from gsplat_trainer.data.data_service import DataManager
 from gsplat_trainer.data.nvs_dataset import NVSDataset
 from gsplat_trainer.io.ply_handling import save_ply
-from gsplat_trainer.logging.logger import Logger
-from gsplat_trainer.logging.logger_factory import LoggerFactory
+from gsplat_trainer.loggers.logger import Logger
+from gsplat_trainer.loggers.logger_factory import LoggerFactory
 from gsplat_trainer.model.gaussian_model import GaussianModel
 from gsplat_trainer.test.holdout_view_handler import HoldoutViewHandler
 from gsplat_trainer.test.validation_handler import ValidationHandler

@@ -1,7 +1,7 @@
-from gsplat_trainer.logging.backends.mocked_logger_backend import MockedLoggerBackend
-from gsplat_trainer.logging.logger import Logger
+from gsplat_trainer.loggers.backends.mocked_logger_backend import MockedLoggerBackend
+from gsplat_trainer.loggers.logger import Logger
 
-from gsplat_trainer.logging.backends.wandb_logger_backend import WandBLoggerBackend
+from gsplat_trainer.loggers.backends.wandb_logger_backend import WandBLoggerBackend
 
 
 class LoggerFactory:

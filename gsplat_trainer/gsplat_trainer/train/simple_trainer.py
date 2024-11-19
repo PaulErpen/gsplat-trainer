@@ -3,7 +3,7 @@ from typing import Dict, Optional, List
 from gsplat_trainer.config.config import Config
 from gsplat_trainer.data.nvs_dataset import NVSDataset
 from gsplat_trainer.image.image_util import add_backround
-from gsplat_trainer.logging.logger import Logger
+from gsplat_trainer.loggers.logger import Logger
 from gsplat_trainer.metrics.psnr import psnr
 from gsplat_trainer.metrics.ssim import ssim
 from gsplat_trainer.model.gaussian_model import GaussianModel

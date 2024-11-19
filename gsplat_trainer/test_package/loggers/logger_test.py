@@ -1,6 +1,6 @@
 import unittest
 
-from gsplat_trainer.logging.logger_factory import LoggerFactory
+from gsplat_trainer.loggers.logger_factory import LoggerFactory
 
 
 class LoggerTest(unittest.TestCase):
