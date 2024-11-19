@@ -23,7 +23,7 @@ class HoldoutViewHandler:
         self.device = device
         self.out_dir = Path(out_dir)
 
-    def to(self, device):
+    def to(self, device: str) -> None:
         self.device = device
         self.holdout_view_matrix = self.holdout_view_matrix.to(device)
         self.K = self.K.to(device)

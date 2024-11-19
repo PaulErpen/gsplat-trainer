@@ -33,16 +33,14 @@ class SimpleTrainer:
         validation_handler: Optional[ValidationHandler] = None,
         device="cuda",
     ):
-        self.device = torch.device(device)
+        self.device = device
         self.train_dataset = train_dataset
         self.test_dataset = test_dataset
         self.holdout_view_handler = holdout_view_handler
-        if self.holdout_view_handler is not None:
-            self.holdout_view_handler.to(self.device)
         self.config = config
         self.holdout_view_frequency = config.holdout_view_frequency
 
-        self.gaussian_model = gaussian_model.to(self.device)
+        self.gaussian_model = gaussian_model
 
         self.optimizers = optimizers
         self.schedulers = schedulers
@@ -55,7 +53,7 @@ class SimpleTrainer:
         self.cum_created = 0
         self.cum_deleted = 0
 
-        self.bg_color = self.config.bg_color.to(self.device)
+        self.bg_color = self.config.bg_color
 
         self.validation_handler = validation_handler
 
