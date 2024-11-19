@@ -16,6 +16,21 @@ class GaussianModelTest(unittest.TestCase):
             n_points=self.pdc_points
         ).to(self.device)
 
+    def test_given_a_valid_gaussian_model__when_forwarding_with_camera_parameters__then_do_not_throw_an_error(
+        self,
+    ) -> None:
+
+        pose, image, alphas, intrinsics = self.dataset[0]
+        H, W, C = image.shape
+        self.gaussian_model(
+            view_matrix=pose.unsqueeze(0),
+            K=intrinsics.unsqueeze(0),
+            H=H,
+            W=W,
+            sh_degree_to_use=3,
+            bg_color=torch.ones((3,)),
+        )
+
     def test_given_a_valid_gaussian_model__when_forwarding_with_camera_parameters__then_return_a_meta_dictionary_with_the_correct_keys(
         self,
     ) -> None:
@@ -29,7 +44,7 @@ class GaussianModelTest(unittest.TestCase):
                 H=H,
                 W=W,
                 sh_degree_to_use=3,
-                bg_color=torch.ones(1, 3),
+                bg_color=torch.ones((3,)),
             )[0].shape,
             (1, 128, 128, 3),
         )
@@ -45,7 +60,7 @@ class GaussianModelTest(unittest.TestCase):
                     128,
                     128,
                     3,
-                    torch.ones(1, 3),
+                    bg_color=torch.ones((3,)),
                 )[2].keys()
             ),
             [
