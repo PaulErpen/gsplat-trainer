@@ -64,6 +64,12 @@ class Config:
     # Reset opacities every this steps. Default is 3001
     reset_every: int = 3001
 
+    # LOGGING
+    # the project in wandb the run is gonna be logged under
+    wandb_project_name: str = "gs-on-a-budget"
+    # the run name for this praticular traning instance (should ideally be unique)
+    run_name: str = ""
+
     @classmethod
     def from_cli_args(cls, args: Sequence[str]) -> "Config":
         parser = argparse.ArgumentParser()
@@ -201,6 +207,19 @@ class Config:
             default=3001,
             help="Reset opacities every this steps. Default is 3001",
         )
+        parser.add_argument(
+            "--wandb_project_name",
+            type=str,
+            default="gs-on-a-budget",
+            help="the project in wandb the run is gonna be logged under",
+        )
+        parser.add_argument(
+            "--run_name",
+            type=str,
+            default="",
+            help="the run name for this praticular traning instance (should ideally be unique)",
+            required=True,
+        )
 
         parsed_args = parser.parse_args(args)
         config: "Config" = cls()
@@ -228,5 +247,7 @@ class Config:
         config.refine_every = parsed_args.refine_every
         config.min_opacity = parsed_args.min_opacity
         config.sh_degree_interval = parsed_args.sh_degree_interval
+        config.wandb_project_name = parsed_args.wandb_project_name
+        config.run_name = parsed_args.run_name
 
         return config

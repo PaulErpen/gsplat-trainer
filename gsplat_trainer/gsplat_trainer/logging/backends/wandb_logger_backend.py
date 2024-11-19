@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from typing import Dict
 from gsplat_trainer.logging.backends.logger_backend import LoggerBackend
@@ -9,13 +10,14 @@ try:
 except:
     WANDB_AVAILABLE = False
 
+WANDB_API_KEY_ENV_VAR = "WANDB_API_KEY"
+
 
 class WandBLoggerBackend(LoggerBackend):
     def __init__(
         self,
         wandb_project: str,
         wandb_run_name: str,
-        wandb_key_file_path: str,
     ) -> None:
         if not WANDB_AVAILABLE:
             raise Exception("WandB backend isn't available")
@@ -24,11 +26,12 @@ class WandBLoggerBackend(LoggerBackend):
         self.wandb_project = wandb_project
         self.wandb_run_name = wandb_run_name
 
-        if not Path(wandb_key_file_path).exists():
-            raise Exception(f'no wandb key file available at "{wandb_key_file_path}"')
+        if os.environ.get(WANDB_API_KEY_ENV_VAR) is None:
+            raise Exception(
+                f'no wandb key found in environment "{WANDB_API_KEY_ENV_VAR}"'
+            )
 
-        with open(wandb_key_file_path, "r") as f:
-            self.wandb_key = f.read().strip()
+        self.wandb_key = os.environ.get(WANDB_API_KEY_ENV_VAR)
 
         wandb.login(key=self.wandb_key)
         self.run = wandb.init(

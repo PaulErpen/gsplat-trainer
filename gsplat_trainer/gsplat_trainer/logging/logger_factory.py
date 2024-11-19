@@ -9,11 +9,8 @@ class LoggerFactory:
     def create_wandb_logger(
         wandb_project: str,
         wandb_run_name: str,
-        wandb_key_file_path: str,
     ) -> Logger:
-        wandb_backend = WandBLoggerBackend(
-            wandb_project, wandb_run_name, wandb_key_file_path
-        )
+        wandb_backend = WandBLoggerBackend(wandb_project, wandb_run_name)
         return Logger(logger_backend=wandb_backend)
 
     @staticmethod
