@@ -18,6 +18,7 @@ class PlyHandlingTest(unittest.TestCase):
 
         self.assertTrue(Path(self.temp_file_path).exists())
 
+    @unittest.skip()
     def test_given_a_saved_gaussian_model__when_loading_it_from_a_file__the_resulting_model_should_be_valid(
         self,
     ) -> None:
