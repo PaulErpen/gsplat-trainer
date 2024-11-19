@@ -47,3 +47,6 @@ class HoldoutviewHandlerTest(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree("unittests/test-renders", ignore_errors=True)
+
+        if self.device == "cuda":
+            torch.cuda.empty_cache()
