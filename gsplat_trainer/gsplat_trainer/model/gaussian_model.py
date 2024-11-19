@@ -73,7 +73,7 @@ class GaussianModel(nn.Module):
             quats=self.params["quats"].to(device),
             scales=torch.exp(self.params["scales"].to(device)),
             opacities=torch.sigmoid(self.params["opacities"].to(device)),
-            colors=colors,
+            colors=colors.to(device),
             viewmats=view_matrix.to(device),
             Ks=K,
             width=W,
