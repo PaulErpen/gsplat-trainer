@@ -11,7 +11,7 @@ import numpy as np
 class BlenderSyntheticDatasetFactoryTest(unittest.TestCase):
     def setUp(self):
         self.dataset_factory = BlenderSyntheticDatasetFactory(
-            data_root=f"{os.getcwd()}/../mocked_datasets/lego",
+            data_root=f"{os.getcwd()}/mocked_datasets/lego",
             splits=["train"],
             max_num_init_points=100,
         )
