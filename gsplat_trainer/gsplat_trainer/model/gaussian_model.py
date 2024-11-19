@@ -68,7 +68,7 @@ class GaussianModel(nn.Module):
 
         device = self.params["means"].device
 
-        assert device == "cuda"
+        assert device == "cuda", device
 
         renders, alphas, info = rasterization(
             means=self.params["means"].to(device),
