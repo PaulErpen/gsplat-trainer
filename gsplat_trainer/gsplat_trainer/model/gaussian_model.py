@@ -29,9 +29,9 @@ class GaussianModel(nn.Module):
         colors = torch.zeros((num_points, (sh_degree + 1) ** 2, 3))  # [N, K, 3]
         colors[:, 0, :] = rgb_to_sh(torch.tensor(np.asarray(pcd.colors)).float())
 
-        distance_basis = points
+        distance_basis = points.clone()
         if torch.cuda.is_available():
-            distance_basis = torch.from_numpy(np.asarray(pcd.points)).float().cuda()
+            distance_basis = distance_basis.cuda()
         dist2 = torch.clamp_min(distCUDA2(distance_basis), 0.0000001)
         scales = torch.log(torch.sqrt(dist2))[..., None].repeat(1, 3)
 
