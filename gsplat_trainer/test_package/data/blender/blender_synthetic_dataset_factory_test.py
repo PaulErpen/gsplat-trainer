@@ -60,4 +60,4 @@ class BlenderSyntheticDatasetFactoryTest(unittest.TestCase):
 
         self.assertIsNotNone(dataset.norm)
         self.assertEqual(dataset.norm.translation.shape, (3,))
-        self.assertIsInstance(dataset.norm.radius, np.float32)
+        self.assertIsInstance(dataset.norm.radius, np.floating)
