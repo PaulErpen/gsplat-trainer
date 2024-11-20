@@ -9,7 +9,7 @@ class Logger:
         self.logger_backend = logger_backend
 
     def log(self, dict: Dict, iteration: int):
-        self.logger_backend.log(dict, float(iteration))
+        self.logger_backend.log(dict, iteration)
 
     def finish(self) -> None:
         self.logger_backend.finish()
