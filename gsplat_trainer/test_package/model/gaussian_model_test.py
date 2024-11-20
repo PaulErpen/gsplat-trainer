@@ -49,7 +49,7 @@ class GaussianModelTest(unittest.TestCase):
             H=H,
             W=W,
             sh_degree_to_use=3,
-            bg_color=torch.ones((3,)),
+            bg_color=torch.ones((3,)).unsqueeze(0),
         )
 
     def test_given_a_valid_gaussian_model__when_forwarding_with_camera_parameters__then_return_a_meta_dictionary_with_the_correct_keys(
@@ -67,7 +67,7 @@ class GaussianModelTest(unittest.TestCase):
                 H=H,
                 W=W,
                 sh_degree_to_use=3,
-                bg_color=torch.ones((3,)),
+                bg_color=torch.ones((3,)).unsqueeze(0),
             )[0].shape,
             (1, 128, 128, 3),
         )
@@ -86,7 +86,7 @@ class GaussianModelTest(unittest.TestCase):
                     128,
                     128,
                     3,
-                    bg_color=torch.ones((3,)),
+                    bg_color=torch.ones((3,)).unsqueeze(0),
                 )[2].keys()
             ),
             [
