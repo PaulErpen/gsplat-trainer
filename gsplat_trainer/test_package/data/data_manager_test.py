@@ -24,6 +24,22 @@ class DataManagerTest(unittest.TestCase):
         data_manager = DataManager(self.config)
 
         self.assertIsNotNone(data_manager.get_split("test"))
+    
+    def test_given_a_valid_colmap_dataset_path__when_retrieving_the_train_split__then_do_not_return_none(
+        self,
+    ) -> None:
+        self.config.dataset_path = f"{os.getcwd()}/mocked_datasets/backyard"
+        data_manager = DataManager(self.config)
+
+        self.assertIsNotNone(data_manager.get_split("train"))
+
+    def test_given_a_valid_colmap_dataset_path__when_retrieving_the_test_split__then_do_not_return_none(
+        self,
+    ) -> None:
+        self.config.dataset_path = f"{os.getcwd()}/mocked_datasets/backyard"
+        data_manager = DataManager(self.config)
+
+        self.assertIsNotNone(data_manager.get_split("test"))
 
     def test_given_a_valid_blender_dataset_path__when_retrieving_the_val_split__then_raise_an_exception(
         self,

@@ -5,6 +5,7 @@ from gsplat_trainer.config.config import Config
 from gsplat_trainer.data.blender.blender_synthetic_dataset_factory import (
     BlenderSyntheticDatasetFactory,
 )
+from gsplat_trainer.data.colmap.comap_dataset_factory import ColmapDatasetFactory
 from gsplat_trainer.data.dataset_factory import DatasetFactory
 from gsplat_trainer.data.nvs_dataset import NVSDataset
 
@@ -20,7 +21,19 @@ class DataManager:
             return
 
         if ((Path(self.config.dataset_path) / Path(f"transforms_train.json"))).exists():
+            print(
+                'Found "transforms_train.json". Assuming NeRF synthetic blender dataset.'
+            )
             self.factory = BlenderSyntheticDatasetFactory(
+                data_root=self.config.dataset_path,
+                splits=["train", "test"],
+                max_num_init_points=config.init_num_gaussians,
+            )
+            return
+
+        if ((Path(self.config.dataset_path) / Path(f"sparse/0/images.bin"))).exists():
+            print('Found "images.bin". Assuming Colmap dataset.')
+            self.factory = ColmapDatasetFactory(
                 data_root=self.config.dataset_path,
                 splits=["train", "test"],
                 max_num_init_points=config.init_num_gaussians,
