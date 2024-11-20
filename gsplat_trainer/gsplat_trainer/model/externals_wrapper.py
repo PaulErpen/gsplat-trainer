@@ -75,5 +75,11 @@ try:
     rasterization = rasterization
     distCUDA2 = distCUDA2
 except (ImportError, RuntimeError):
+    print(
+        'Could not get cuda specific libraries "gsplat" and "simple_knn" reverting to mocked backend!'
+    )
+    assert (
+        torch.cuda.is_available() == False
+    ), 'Warning! Cuda is available, but "gsplat" and "simple_knn" libraries are not available! This is an illegal state!'
     rasterization = mocked_rasterization
     distCUDA2 = mocked_dist_cuda_2
