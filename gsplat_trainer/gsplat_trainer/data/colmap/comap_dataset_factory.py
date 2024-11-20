@@ -13,6 +13,7 @@ from gsplat_trainer.data.nvs_dataset import NVSDataset
 from gsplat_trainer.geometry.geometry_utils import getWorld2View2
 import numpy as np
 import torch
+from torchvision import transforms
 
 
 class ColmapDatasetFactory(DatasetFactory):
@@ -56,6 +57,7 @@ class ColmapDatasetFactory(DatasetFactory):
         assert pcd is not None, "The point-cloud cannot be None after initialization!"
 
         self.splits: Dict[str, NVSDataset] = {}
+        to_tensor_tf = transforms.ToTensor()
 
         if "train" in splits:
             train_cam_infos = [
@@ -73,7 +75,7 @@ class ColmapDatasetFactory(DatasetFactory):
                 ]
             ).float()
             images = torch.stack(
-                [torch.from_numpy(c.image) for c in train_cam_infos]
+                [to_tensor_tf(c.image) for c in train_cam_infos]
             ).float()
             alphas = torch.zeros_like(images)
 
@@ -102,7 +104,7 @@ class ColmapDatasetFactory(DatasetFactory):
                 ]
             ).float()
             images = torch.stack(
-                [torch.from_numpy(c.image) for c in test_cam_infos]
+                [to_tensor_tf(c.image) for c in test_cam_infos]
             ).float()
             alphas = torch.zeros_like(images)
 

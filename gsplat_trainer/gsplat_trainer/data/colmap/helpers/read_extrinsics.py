@@ -1,7 +1,7 @@
+from typing import Dict
 from gsplat_trainer.data.colmap.helpers.byte_helpers import read_next_bytes
 from gsplat_trainer.data.colmap.helpers.types import Image
 import numpy as np
-from pyparsing import Dict
 
 
 def read_extrinsics_binary(path_to_model_file: str) -> Dict[int, Image]:

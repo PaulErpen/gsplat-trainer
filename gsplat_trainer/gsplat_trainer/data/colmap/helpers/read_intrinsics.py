@@ -1,7 +1,7 @@
+from typing import Dict
 from gsplat_trainer.data.colmap.helpers.byte_helpers import read_next_bytes
 from gsplat_trainer.data.colmap.helpers.camera_models import CAMERA_MODEL_IDS
 from gsplat_trainer.data.colmap.helpers.types import Camera
-from pyparsing import Dict
 import numpy as np
 
 

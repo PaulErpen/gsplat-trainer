@@ -1,18 +1,17 @@
 import os
 import sys
-from typing import List
-from gsplat_trainer.data.colmap.helpers.types import Camera, CameraInfo, Image
+from typing import Dict, List
+from gsplat_trainer.data.colmap.helpers.types import Camera, CameraInfo, Image as ImageInfo
 from gsplat_trainer.geometry.geometry_utils import (
     focal2fov,
     getWorld2View2,
     qvec2rotmat,
 )
-from pyparsing import Dict
 import numpy as np
-
+from PIL import Image
 
 def readColmapCameras(
-    cam_extrinsics: Dict[int, Image],
+    cam_extrinsics: Dict[int, ImageInfo],
     cam_intrinsics: Dict[int, Camera],
     images_folder: str,
 ) -> List[CameraInfo]:
