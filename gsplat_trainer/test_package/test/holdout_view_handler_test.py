@@ -29,7 +29,7 @@ class HoldoutviewHandlerTest(unittest.TestCase):
 
     def test_given_a_valid_holdout_view_handler__when_computing_a_set_of_views_and_exporting__then_the_gif_must_exist(
         self,
-    ):
+    ) -> None:
         holdout_view_handler = HoldoutViewHandler(
             torch.eye(4),
             torch.eye(3),
@@ -45,7 +45,7 @@ class HoldoutviewHandlerTest(unittest.TestCase):
 
         assert os.path.exists(f"{self.out_path}/training.gif")
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         shutil.rmtree("unittests/test-renders", ignore_errors=True)
 
         if self.device == "cuda":
