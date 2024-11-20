@@ -65,7 +65,7 @@ class BlenderSyntheticDatasetFactory(DatasetFactory):
                     H, W, _ = images[image_index].shape
                     intrinsics.append(compute_intrinsics_matrix(focal_length, H, W))
                 intrinsics = np.array(intrinsics).astype(np.float32)
-                intrinsics = torch.stack(intrinsics, dim=0)
+                intrinsics = torch.from_numpy(intrinsics)
 
                 pcd = BasicPointCloud.load_initial_points(
                     data_root, max_num_init_points
