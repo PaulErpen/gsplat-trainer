@@ -76,7 +76,7 @@ class GaussianModel(nn.Module):
             opacities=torch.sigmoid(self.params["opacities"].to(device)),
             colors=colors.to(device),
             viewmats=view_matrix.to(device),
-            Ks=K,
+            Ks=K.to(device),
             width=W,
             height=H,
             packed=False,
