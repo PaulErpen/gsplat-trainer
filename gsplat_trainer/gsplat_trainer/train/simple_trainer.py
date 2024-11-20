@@ -40,7 +40,7 @@ class SimpleTrainer:
         self.config = config
         self.holdout_view_frequency = config.holdout_view_frequency
 
-        self.gaussian_model = gaussian_model
+        self.gaussian_model = gaussian_model.to(self.device)
 
         self.optimizers = optimizers
         self.schedulers = schedulers
