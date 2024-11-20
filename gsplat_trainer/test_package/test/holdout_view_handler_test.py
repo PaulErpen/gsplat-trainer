@@ -10,6 +10,7 @@ import os
 class HoldoutviewHandlerTest(unittest.TestCase):
     def setUp(self) -> None:
         N = 100
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.gaussian_model = GaussianModel(
             params=nn.ParameterDict(
                 {
@@ -22,10 +23,9 @@ class HoldoutviewHandlerTest(unittest.TestCase):
                 }
             ),
             scene_scale=123.4,
-        )
+        ).to(self.device)
         self.out_path = "unittests/test-renders"
         os.makedirs(self.out_path, exist_ok=True)
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
 
     def test_given_a_valid_holdout_view_handler__when_computing_a_set_of_views_and_exporting__then_the_gif_must_exist(
         self,
