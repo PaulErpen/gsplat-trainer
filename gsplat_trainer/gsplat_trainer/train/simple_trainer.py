@@ -53,7 +53,7 @@ class SimpleTrainer:
         self.cum_created = 0
         self.cum_deleted = 0
 
-        self.bg_color = self.config.bg_color
+        self.bg_color = self.config.bg_color.to(self.device)
 
         self.validation_handler = validation_handler
 
