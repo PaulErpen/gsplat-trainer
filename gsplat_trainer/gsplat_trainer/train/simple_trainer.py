@@ -70,7 +70,7 @@ class SimpleTrainer:
         tqdm_progress = tqdm(range(1, self.config.max_steps + 1), desc="Training")
         for iter in tqdm_progress:
             start = time.time()
-            pose, gt_image, gt_alpha, K = self.train_dataset[iter]
+            pose, gt_image, gt_alpha, K = self.train_dataset[indeces[(iter - 1) % len(indeces)]]
             viewmat = pose.to(self.device)
             K = K.to(self.device)
             gt_image = gt_image.to(self.device)
