@@ -4,23 +4,24 @@ from dataclasses import dataclass
 import torch
 import numpy as np
 
+
 @dataclass
 class NerfNorm:
-  translation: torch.Tensor
-  radius: float
+    translation: torch.Tensor
+    radius: float
 
-  @classmethod
-  def from_c2w_stack(cls, c2w: torch.Tensor):
-    
-    centers = c2w[:, :3, 3]
-    center = torch.mean(centers, dim=0)
+    @classmethod
+    def from_c2w_stack(cls, c2w: torch.Tensor) -> "NerfNorm":
 
-    assert center.shape == (3,), center.shape
+        centers = c2w[:, :3, 3]
+        center = torch.mean(centers, dim=0)
 
-    centered = (centers - center)
-    dist = np.linalg.norm(centered, axis=1, keepdims=True)
-    diagonal = np.max(dist)
+        assert center.shape == (3,), center.shape
 
-    translate = -center
+        centered = centers - center
+        dist = np.linalg.norm(centered, axis=1, keepdims=True)
+        diagonal = np.max(dist)
 
-    return cls(translate, diagonal * 1.1)
+        translate = -center
+
+        return cls(translate, diagonal * 1.1)
