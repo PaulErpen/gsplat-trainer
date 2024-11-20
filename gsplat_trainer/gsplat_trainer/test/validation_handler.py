@@ -51,11 +51,11 @@ class ValidationHandler:
             for config in self.validation_configs:
                 for test_iter in config["range"]:
                     dataset = config["data"]
-                    K = dataset.intrinsics.to(self.device).to(torch.float32)
-                    observation = dataset[test_iter]
-                    viewmat = observation[0].to(self.device)
-                    gt_image = observation[1].to(self.device)
-                    gt_alpha = observation[2].to(self.device)
+                    pose, gt_image, gt_alpha, K = dataset[test_iter]
+                    viewmat = pose.to(self.device)
+                    K = K.to(self.device)
+                    gt_image = gt_image.to(self.device)
+                    gt_alpha = gt_alpha.to(self.device)
 
                     bg_image = torch.ones_like(gt_image).to(self.device)
 
