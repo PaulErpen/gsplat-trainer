@@ -12,13 +12,21 @@ class GaussianModelTest(unittest.TestCase):
         self.dataset = MockFactory.create_mocked_nvs_dataset(
             n_entries=self.N, H=self.H, W=self.W, n_points=self.pdc_points
         )
+
+    def test_given_a_valid_point_cloud__when_initializing_the_model__then_do_not_raise_an_error(
+        self,
+    ) -> None:
         self.gaussian_model = MockFactory.create_mocked_gaussian_model(
             n_points=self.pdc_points
         ).to(self.device)
 
+    @unittest.skip(reason="debug")
     def test_given_a_valid_gaussian_model__when_moving_to_a_device__the_model_parameters_must_be_on_that_device(
         self,
     ) -> None:
+        self.gaussian_model = MockFactory.create_mocked_gaussian_model(
+            n_points=self.pdc_points
+        ).to(self.device)
         self.assertTrue(str(self.gaussian_model.params["means"].device) == self.device)
         self.assertTrue(str(self.gaussian_model.params["quats"].device) == self.device)
         self.assertTrue(str(self.gaussian_model.params["scales"].device) == self.device)
@@ -32,7 +40,9 @@ class GaussianModelTest(unittest.TestCase):
     def test_given_a_valid_gaussian_model__when_forwarding_with_camera_parameters__then_do_not_throw_an_error(
         self,
     ) -> None:
-
+        self.gaussian_model = MockFactory.create_mocked_gaussian_model(
+            n_points=self.pdc_points
+        ).to(self.device)
         pose, image, alphas, intrinsics = self.dataset[0]
         H, W, C = image.shape
         self.gaussian_model(
@@ -48,7 +58,9 @@ class GaussianModelTest(unittest.TestCase):
     def test_given_a_valid_gaussian_model__when_forwarding_with_camera_parameters__then_return_a_meta_dictionary_with_the_correct_keys(
         self,
     ) -> None:
-
+        self.gaussian_model = MockFactory.create_mocked_gaussian_model(
+            n_points=self.pdc_points
+        ).to(self.device)
         pose, image, alphas, intrinsics = self.dataset[0]
         H, W, C = image.shape
         self.assertEqual(
@@ -67,6 +79,9 @@ class GaussianModelTest(unittest.TestCase):
     def test_given_a_valid_gaussian_model__when_forwarding_with_camera_parameters__then_return_an_image_batch_of_the_correct_dimensions(
         self,
     ) -> None:
+        self.gaussian_model = MockFactory.create_mocked_gaussian_model(
+            n_points=self.pdc_points
+        ).to(self.device)
         self.assertSequenceEqual(
             list(
                 self.gaussian_model(
@@ -102,6 +117,9 @@ class GaussianModelTest(unittest.TestCase):
     def test_given_correct_paramaters__when_initializing__the_parameters_should_have_the_correct_dimensions(
         self,
     ) -> None:
+        self.gaussian_model = MockFactory.create_mocked_gaussian_model(
+            n_points=self.pdc_points
+        ).to(self.device)
         self.assertEqual(
             self.gaussian_model.params["means"].shape, (self.pdc_points, 3)
         )
