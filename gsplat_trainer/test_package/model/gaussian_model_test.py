@@ -116,7 +116,7 @@ class GaussianModelTest(unittest.TestCase):
     ) -> None:
         gaussian_model = MockFactory.create_mocked_gaussian_model(
             n_points=self.pdc_points
-        )
+        ).to(self.device)
         config = Config()
         config.dataset_path = f"{os.getcwd()}/mocked_datasets/lego"
         blender_dataset = DataManager(config).get_split("train")
