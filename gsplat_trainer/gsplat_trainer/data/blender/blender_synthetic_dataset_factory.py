@@ -60,12 +60,10 @@ class BlenderSyntheticDatasetFactory(DatasetFactory):
                 camera_angle_x = float(meta["camera_angle_x"])
 
                 focal_length = 0.5 * 800 / np.tan(0.5 * camera_angle_x)
-                intrinsics = []
-                for image_index in range(images.shape[0]):
-                    H, W, _ = images[image_index].shape
-                    intrinsics.append(compute_intrinsics_matrix(focal_length, H, W))
-                intrinsics = np.array(intrinsics).astype(np.float32)
-                intrinsics = torch.from_numpy(intrinsics)
+                N, W, H, _ = images.shape
+                intrinsics = compute_intrinsics_matrix(focal_length, W, H).repeat(
+                    (N, 1, 1)
+                )
 
                 pcd = BasicPointCloud.load_initial_points(
                     data_root, max_num_init_points
