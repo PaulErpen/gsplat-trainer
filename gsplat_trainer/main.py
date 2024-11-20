@@ -38,7 +38,7 @@ if __name__ == "__main__":
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
-    print(f"Using device {device}")
+    print(f'Using device "{device}"')
 
     config: Config = Config.from_cli_args(args[1:])
 
@@ -48,6 +48,8 @@ if __name__ == "__main__":
     test_split = data_manager.get_split("test")
 
     holdout_view_handler = create_holdout_view_handler(test_split, device, config)
+
+    print(f"Initialize model and strategy using scene scale: {train_split.norm.radius}")
 
     initial_model = GaussianModel.from_point_cloud(
         pcd=train_split.pcd,
