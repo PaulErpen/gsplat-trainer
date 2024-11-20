@@ -15,7 +15,7 @@ class SimpleTrainerTest(unittest.TestCase):
         self.test_dataset = MockFactory.create_mocked_nvs_dataset()
         self.gaussian_model = MockFactory.create_mocked_gaussian_model()
         self.config = Config()
-        self.strategy = Strategy(self.config)
+        self.strategy = Strategy(self.config, 123.4)
         self.optimizers = OptimizerFactory.create_optimizers(self.gaussian_model)
         self.lr_schedulers = SchedulerFactory.create_schedulers(
             self.optimizers, self.config

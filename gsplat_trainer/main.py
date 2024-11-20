@@ -55,7 +55,7 @@ if __name__ == "__main__":
         sh_degree=config.sh_degree,
     )
 
-    strategy = Strategy(config=config)
+    strategy = Strategy(config=config, scene_radius=train_split.norm.radius)
 
     optimizers = OptimizerFactory.create_optimizers(initial_model)
     schedulers = SchedulerFactory.create_schedulers(

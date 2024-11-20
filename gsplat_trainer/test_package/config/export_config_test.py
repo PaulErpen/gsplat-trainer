@@ -10,7 +10,7 @@ from gsplat_trainer.train.strategy.strategy_wrapper import Strategy
 class ExportConfigTest(unittest.TestCase):
     def setUp(self) -> None:
         self.config = Config()
-        self.strategy = Strategy(self.config)
+        self.strategy = Strategy(self.config, 123.4)
         self.export_path = "out_dir"
 
     def test_given_a_config_and_a_strategy__when_exporting__then_the_export_file_must_exist(

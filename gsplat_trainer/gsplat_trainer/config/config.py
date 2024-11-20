@@ -13,8 +13,6 @@ class Config:
     output_path: str = ""
 
     # INITIALIZATION
-    # Radius of the scene (Especially important for NeRF data i think)
-    scene_radius: Optional[float] = None
     # Initial number of Gaussians
     init_num_gaussians: int = 2000
     # The number of spherical harmonics degrees to compute the color

@@ -6,7 +6,7 @@ from gsplat_trainer.train.strategy.mcmc_strategy import MCMCStrategy
 
 
 class Strategy:
-    def __init__(self, config: Config):
+    def __init__(self, config: Config, scene_radius: float):
         if config.strategy_type == "mcmc":
             self.strategy = MCMCStrategy(
                 cap_max=config.cap_max,
@@ -22,9 +22,8 @@ class Strategy:
             self.strategy = DefaultStrategy(
                 cap_max=config.cap_max, reset_every=config.reset_every
             )
-            assert config.scene_radius is not None
             self.strategy_state = self.strategy.initialize_state(
-                scene_scale=config.scene_radius
+                scene_scale=scene_radius
             )
         else:
             AssertionError(f"Unknown strategy {self.strategy}")
