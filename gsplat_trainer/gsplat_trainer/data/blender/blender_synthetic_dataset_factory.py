@@ -60,7 +60,7 @@ class BlenderSyntheticDatasetFactory(DatasetFactory):
                 camera_angle_x = float(meta["camera_angle_x"])
 
                 focal_length = 0.5 * 800 / np.tan(0.5 * camera_angle_x)
-                N, W, H, _ = images.shape
+                N, H, W, _ = images.shape
                 intrinsics = compute_intrinsics_matrix(focal_length, W, H).repeat(
                     (N, 1, 1)
                 )

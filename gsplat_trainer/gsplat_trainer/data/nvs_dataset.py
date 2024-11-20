@@ -23,7 +23,7 @@ class NVSDataset(torch.utils.data.Dataset):
         self.pcd = pcd
         self.norm = norm
 
-    def __len__(self):
+    def __len__(self) -> int:
         return self.poses.shape[0]
 
     def __getitem__(self, idx) -> Tuple[torch.Tensor, torch.Tensor]:

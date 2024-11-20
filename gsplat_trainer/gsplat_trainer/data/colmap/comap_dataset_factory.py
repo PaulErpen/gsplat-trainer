@@ -75,7 +75,7 @@ class ColmapDatasetFactory(DatasetFactory):
                 ]
             ).float()
             images = torch.stack(
-                [to_tensor_tf(c.image) for c in train_cam_infos]
+                [to_tensor_tf(c.image).permute(1, 2, 0)[..., :3] for c in train_cam_infos]
             ).float()
             alphas = torch.zeros_like(images)
 
@@ -104,11 +104,11 @@ class ColmapDatasetFactory(DatasetFactory):
                 ]
             ).float()
             images = torch.stack(
-                [to_tensor_tf(c.image) for c in test_cam_infos]
+                [to_tensor_tf(c.image).permute(1, 2, 0)[..., :3] for c in test_cam_infos]
             ).float()
             alphas = torch.zeros_like(images)
 
-            self.splits["train"] = NVSDataset(
+            self.splits["test"] = NVSDataset(
                 poses=poses,
                 images=images,
                 alphas=alphas,
