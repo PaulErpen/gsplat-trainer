@@ -69,7 +69,7 @@ class BlenderSyntheticDatasetFactory(DatasetFactory):
                     data_root, max_num_init_points
                 )
 
-                norm = NerfNorm.from_c2w_stack(poses)
+                norm = NerfNorm.from_w2c_stack(poses)
 
                 self.datasets[split] = NVSDataset(
                     poses=poses,

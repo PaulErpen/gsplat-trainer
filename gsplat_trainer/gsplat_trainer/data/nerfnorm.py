@@ -11,17 +11,25 @@ class NerfNorm:
     radius: float
 
     @classmethod
-    def from_c2w_stack(cls, c2w: torch.Tensor) -> "NerfNorm":
+    def from_w2c_stack(cls, w2c: torch.Tensor) -> "NerfNorm":
 
-        centers = c2w[:, :3, 3]
-        center = torch.mean(centers, dim=0)
+        def get_center_and_diag(cam_centers):
+            cam_centers = np.hstack(cam_centers)
+            avg_cam_center = np.mean(cam_centers, axis=1, keepdims=True)
+            center = avg_cam_center
+            dist = np.linalg.norm(cam_centers - center, axis=0, keepdims=True)
+            diagonal = np.max(dist)
+            return center.flatten(), diagonal
 
-        assert center.shape == (3,), center.shape
+        cam_centers = []
 
-        centered = centers - center
-        dist = np.linalg.norm(centered, axis=1, keepdims=True)
-        diagonal = np.max(dist)
+        for i in range(w2c.shape[0]):
+            C2W = np.linalg.inv(w2c[i])
+            cam_centers.append(C2W[:3, 3:4])
+
+        center, diagonal = get_center_and_diag(cam_centers)
+        radius = diagonal * 1.1
 
         translate = -center
 
-        return cls(translate, diagonal * 1.1)
+        return cls(translate, diagonal)
