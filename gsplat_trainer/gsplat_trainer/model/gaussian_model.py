@@ -32,7 +32,7 @@ class GaussianModel(nn.Module):
         distance_basis = points.clone()
         if torch.cuda.is_available():
             distance_basis = distance_basis.cuda()
-        dist2 = torch.clamp_min(distCUDA2(), 0.0000001)
+        dist2 = torch.clamp_min(distCUDA2(distance_basis), 0.0000001)
         scales = torch.log(torch.sqrt(dist2))[..., None].repeat(1, 3)
 
         opacities = inverse_sigmoid(0.1 * torch.ones((num_points), dtype=torch.float))
