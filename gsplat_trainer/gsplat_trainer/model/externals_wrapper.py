@@ -58,6 +58,7 @@ def mocked_rasterization(
             "width": torch.tensor([], requires_grad=True),
             "height": torch.tensor([], requires_grad=True),
             "tile_size": torch.tensor([], requires_grad=True),
+            "n_cameras": B,
         },
     )
 
