@@ -23,6 +23,8 @@ class Config:
     packed: bool = False
     # The background color to use to render the splats (is also pasted "under" the train and test images)
     bg_color: torch.tensor = field(default_factory=lambda: torch.ones((3,)))
+    # the downscale factor for the input image resolution
+    image_downscale: Literal[1, 2, 4, 8] = 1
 
     # TRAINING
     # Strategy to use for densifying the gaussians
@@ -107,6 +109,13 @@ class Config:
             default=False,
             action="store_true",
             help='The background color to use to render the splats (is also pasted "under" the train and test images)',
+        )
+        parser.add_argument(
+            "--image_downscale",
+            default=1,
+            type=int,
+            choices=[1, 2, 4, 8],
+            help="The downscale factor for the input image resolution",
         )
         parser.add_argument(
             "--strategy_type",

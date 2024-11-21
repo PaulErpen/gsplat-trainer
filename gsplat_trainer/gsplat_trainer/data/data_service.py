@@ -37,6 +37,7 @@ class DataManager:
                 data_root=self.config.dataset_path,
                 splits=["train", "test"],
                 max_num_init_points=config.init_num_gaussians,
+                image_downscale_factor=config.image_downscale,
             )
             return
 

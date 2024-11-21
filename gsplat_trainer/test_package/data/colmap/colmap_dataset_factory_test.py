@@ -1,3 +1,4 @@
+from math import floor
 import os
 from pathlib import Path
 import unittest
@@ -74,8 +75,10 @@ class ColmapDatasetFactoryTest(unittest.TestCase):
         )
 
         self.assertEqual(len(colmap_datatset_factory.get_split("test")), 2)
-    
-    def test_given_a_valid_colmap_dataset_factory__when_retrieving_the_first_train_datapoint__then_the_image_must_have_the_correct_dimensions(self) -> None:
+
+    def test_given_a_valid_colmap_dataset_factory__when_retrieving_the_first_train_datapoint__then_the_image_must_have_the_correct_dimensions(
+        self,
+    ) -> None:
         train_split = ColmapDatasetFactory(
             data_root=self.dataset_path,
             splits=["train", "test"],
@@ -85,8 +88,10 @@ class ColmapDatasetFactoryTest(unittest.TestCase):
 
         H, W = 2142, 2856
         self.assertEqual(image.shape, (H, W, 3))
-    
-    def test_given_a_valid_colmap_dataset_factory__when_retrieving_the_first_test_datapoint__then_the_image_must_have_the_correct_dimensions(self) -> None:
+
+    def test_given_a_valid_colmap_dataset_factory__when_retrieving_the_first_test_datapoint__then_the_image_must_have_the_correct_dimensions(
+        self,
+    ) -> None:
         test_split = ColmapDatasetFactory(
             data_root=self.dataset_path,
             splits=["train", "test"],
@@ -97,7 +102,37 @@ class ColmapDatasetFactoryTest(unittest.TestCase):
         H, W = 2142, 2856
         self.assertEqual(image.shape, (H, W, 3))
 
-    def test_given_a_valid_colmap_dataset_factory__when_retrieving_the_first_train_datapoint__then_the_pose_must_have_the_correct_dimensions(self) -> None:
+    def test_given_a_valid_colmap_dataset_factory_with_a_downscale_of_4__when_retrieving_the_first_train_datapoint__then_the_image_must_have_the_correct_dimensions(
+        self,
+    ) -> None:
+        test_split = ColmapDatasetFactory(
+            data_root=self.dataset_path,
+            splits=["train", "test"],
+            max_num_init_points=1000,
+            image_downscale_factor=4,
+        ).get_split("train")
+        pose, image, alpha, intrinsics = test_split[0]
+
+        H, W = floor(2142 / 4), floor(2856 / 4)
+        self.assertEqual(image.shape, (H, W, 3))
+
+    def test_given_a_valid_colmap_dataset_factory_with_a_downscale_of_4__when_retrieving_the_first_test_datapoint__then_the_image_must_have_the_correct_dimensions(
+        self,
+    ) -> None:
+        test_split = ColmapDatasetFactory(
+            data_root=self.dataset_path,
+            splits=["train", "test"],
+            max_num_init_points=1000,
+            image_downscale_factor=4,
+        ).get_split("test")
+        pose, image, alpha, intrinsics = test_split[0]
+
+        H, W = floor(2142 / 4), floor(2856 / 4)
+        self.assertEqual(image.shape, (H, W, 3))
+
+    def test_given_a_valid_colmap_dataset_factory__when_retrieving_the_first_train_datapoint__then_the_pose_must_have_the_correct_dimensions(
+        self,
+    ) -> None:
         train_split = ColmapDatasetFactory(
             data_root=self.dataset_path,
             splits=["train", "test"],
@@ -106,8 +141,10 @@ class ColmapDatasetFactoryTest(unittest.TestCase):
         pose, image, alpha, intrinsics = train_split[0]
 
         self.assertEqual(pose.shape, (4, 4))
-    
-    def test_given_a_valid_colmap_dataset_factory__when_retrieving_the_first_test_datapoint__then_the_pose_must_have_the_correct_dimensions(self) -> None:
+
+    def test_given_a_valid_colmap_dataset_factory__when_retrieving_the_first_test_datapoint__then_the_pose_must_have_the_correct_dimensions(
+        self,
+    ) -> None:
         test_split = ColmapDatasetFactory(
             data_root=self.dataset_path,
             splits=["train", "test"],
@@ -117,7 +154,9 @@ class ColmapDatasetFactoryTest(unittest.TestCase):
 
         self.assertEqual(pose.shape, (4, 4))
 
-    def test_given_a_valid_colmap_dataset_factory__when_retrieving_the_first_train_datapoint__then_the_alpha_must_have_the_correct_dimensions(self) -> None:
+    def test_given_a_valid_colmap_dataset_factory__when_retrieving_the_first_train_datapoint__then_the_alpha_must_have_the_correct_dimensions(
+        self,
+    ) -> None:
         train_split = ColmapDatasetFactory(
             data_root=self.dataset_path,
             splits=["train", "test"],
@@ -127,8 +166,10 @@ class ColmapDatasetFactoryTest(unittest.TestCase):
 
         H, W = 2142, 2856
         self.assertEqual(alpha.shape, (H, W, 3))
-    
-    def test_given_a_valid_colmap_dataset_factory__when_retrieving_the_first_test_datapoint__then_the_alpha_must_have_the_correct_dimensions(self) -> None:
+
+    def test_given_a_valid_colmap_dataset_factory__when_retrieving_the_first_test_datapoint__then_the_alpha_must_have_the_correct_dimensions(
+        self,
+    ) -> None:
         test_split = ColmapDatasetFactory(
             data_root=self.dataset_path,
             splits=["train", "test"],
@@ -138,10 +179,12 @@ class ColmapDatasetFactoryTest(unittest.TestCase):
 
         H, W = 2142, 2856
         self.assertEqual(alpha.shape, (H, W, 3))
-    
-    #intrinsics
-    
-    def test_given_a_valid_colmap_dataset_factory__when_retrieving_the_first_train_datapoint__then_the_intrinsics_must_have_the_correct_dimensions(self) -> None:
+
+    # intrinsics
+
+    def test_given_a_valid_colmap_dataset_factory__when_retrieving_the_first_train_datapoint__then_the_intrinsics_must_have_the_correct_dimensions(
+        self,
+    ) -> None:
         train_split = ColmapDatasetFactory(
             data_root=self.dataset_path,
             splits=["train", "test"],
@@ -150,8 +193,10 @@ class ColmapDatasetFactoryTest(unittest.TestCase):
         pose, image, alpha, intrinsics = train_split[0]
 
         self.assertEqual(intrinsics.shape, (3, 3))
-    
-    def test_given_a_valid_colmap_dataset_factory__when_retrieving_the_first_test_datapoint__then_the_intrinsics_must_have_the_correct_dimensions(self) -> None:
+
+    def test_given_a_valid_colmap_dataset_factory__when_retrieving_the_first_test_datapoint__then_the_intrinsics_must_have_the_correct_dimensions(
+        self,
+    ) -> None:
         test_split = ColmapDatasetFactory(
             data_root=self.dataset_path,
             splits=["train", "test"],

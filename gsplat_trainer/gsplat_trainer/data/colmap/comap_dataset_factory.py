@@ -11,9 +11,9 @@ from gsplat_trainer.data.dataset_factory import DatasetFactory
 from gsplat_trainer.data.nerfnorm import NerfNorm
 from gsplat_trainer.data.nvs_dataset import NVSDataset
 from gsplat_trainer.geometry.geometry_utils import getWorld2View2
+from gsplat_trainer.graphics.graphics_helpers import image_downscale
 import numpy as np
 import torch
-from torchvision import transforms
 
 
 class ColmapDatasetFactory(DatasetFactory):
@@ -22,6 +22,7 @@ class ColmapDatasetFactory(DatasetFactory):
         data_root: str,
         splits: List[Literal["train", "test"]],
         max_num_init_points: int,
+        image_downscale_factor: Literal[1, 2, 4, 8] = 1,
         holdout_interval=8,
     ):
         data_root = Path(data_root)
@@ -57,7 +58,6 @@ class ColmapDatasetFactory(DatasetFactory):
         assert pcd is not None, "The point-cloud cannot be None after initialization!"
 
         self.splits: Dict[str, NVSDataset] = {}
-        to_tensor_tf = transforms.ToTensor()
 
         if "train" in splits:
             train_cam_infos = [
@@ -71,7 +71,7 @@ class ColmapDatasetFactory(DatasetFactory):
             intrinsics = torch.stack([c.intrinsics for c in train_cam_infos]).float()
             images = torch.stack(
                 [
-                    to_tensor_tf(c.image).permute(1, 2, 0)[..., :3]
+                    image_downscale(c.image, image_downscale_factor)[..., :3]
                     for c in train_cam_infos
                 ]
             ).float()
@@ -98,7 +98,7 @@ class ColmapDatasetFactory(DatasetFactory):
             intrinsics = torch.stack([c.intrinsics for c in test_cam_infos]).float()
             images = torch.stack(
                 [
-                    to_tensor_tf(c.image).permute(1, 2, 0)[..., :3]
+                    image_downscale(c.image, image_downscale_factor)[..., :3]
                     for c in test_cam_infos
                 ]
             ).float()
