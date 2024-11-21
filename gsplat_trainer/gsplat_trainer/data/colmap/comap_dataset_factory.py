@@ -75,7 +75,7 @@ class ColmapDatasetFactory(DatasetFactory):
                     for c in train_cam_infos
                 ]
             ).float()
-            alphas = torch.zeros_like(images)
+            alphas = torch.ones_like(images)
 
             self.splits["train"] = NVSDataset(
                 poses=poses,
@@ -102,7 +102,7 @@ class ColmapDatasetFactory(DatasetFactory):
                     for c in test_cam_infos
                 ]
             ).float()
-            alphas = torch.zeros_like(images)
+            alphas = torch.ones_like(images)
 
             self.splits["test"] = NVSDataset(
                 poses=poses,
