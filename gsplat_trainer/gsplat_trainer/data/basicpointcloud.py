@@ -35,7 +35,9 @@ class BasicPointCloud(NamedTuple):
                 points=xyz, colors=sh_to_rgb(shs), normals=np.zeros((num_points, 3))
             )
 
-            BasicPointCloud.storePly(ply_path, xyz, sh_to_rgb(shs) * 255)
+            BasicPointCloud(xyz, sh_to_rgb(shs) * 255, np.zeros_like(xyz)).storePly(
+                ply_path,
+            )
         else:
             pcd = BasicPointCloud.fetchPly(ply_path)
 

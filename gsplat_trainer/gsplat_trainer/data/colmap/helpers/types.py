@@ -1,5 +1,6 @@
 from typing import NamedTuple
 import numpy as np
+import torch
 
 
 class CameraModel(NamedTuple):
@@ -46,5 +47,5 @@ class CameraInfo(NamedTuple):
     image_name: str
     width: int
     height: int
-    focal_length: float
+    intrinsics: torch.Tensor
     cam_center: np.array = None

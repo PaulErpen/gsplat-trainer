@@ -68,14 +68,12 @@ class ColmapDatasetFactory(DatasetFactory):
             poses = torch.stack(
                 [torch.from_numpy(getWorld2View2(c.R, c.T)) for c in train_cam_infos]
             ).float()
-            intrinsics = torch.stack(
+            intrinsics = torch.stack([c.intrinsics for c in train_cam_infos]).float()
+            images = torch.stack(
                 [
-                    compute_intrinsics_matrix(c.focal_length, c.width, c.height)
+                    to_tensor_tf(c.image).permute(1, 2, 0)[..., :3]
                     for c in train_cam_infos
                 ]
-            ).float()
-            images = torch.stack(
-                [to_tensor_tf(c.image).permute(1, 2, 0)[..., :3] for c in train_cam_infos]
             ).float()
             alphas = torch.zeros_like(images)
 
@@ -97,14 +95,12 @@ class ColmapDatasetFactory(DatasetFactory):
             poses = torch.stack(
                 [torch.from_numpy(getWorld2View2(c.R, c.T)) for c in test_cam_infos]
             ).float()
-            intrinsics = torch.stack(
+            intrinsics = torch.stack([c.intrinsics for c in test_cam_infos]).float()
+            images = torch.stack(
                 [
-                    compute_intrinsics_matrix(c.focal_length, c.width, c.height)
+                    to_tensor_tf(c.image).permute(1, 2, 0)[..., :3]
                     for c in test_cam_infos
                 ]
-            ).float()
-            images = torch.stack(
-                [to_tensor_tf(c.image).permute(1, 2, 0)[..., :3] for c in test_cam_infos]
             ).float()
             alphas = torch.zeros_like(images)
 
