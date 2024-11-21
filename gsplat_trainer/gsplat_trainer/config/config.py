@@ -265,6 +265,6 @@ class Config:
         config.wandb_project_name = parsed_args.wandb_project_name
         config.run_name = parsed_args.run_name
         config.image_downscale = parsed_args.image_downscale
-        parser.holdout_view_index = parsed_args.holdout_view_index
+        config.holdout_view_index = parsed_args.holdout_view_index
 
         return config
