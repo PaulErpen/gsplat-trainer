@@ -1,6 +1,6 @@
 import argparse
 from dataclasses import dataclass, field
-from typing import List, Literal, Optional, Sequence
+from typing import List, Literal, Sequence
 import torch
 
 
@@ -25,6 +25,8 @@ class Config:
     bg_color: torch.tensor = field(default_factory=lambda: torch.ones((3,)))
     # the downscale factor for the input image resolution
     image_downscale: Literal[1, 2, 4, 8] = 1
+    # the test set index for the holdout view
+    holdout_view_index: int = 0
 
     # TRAINING
     # Strategy to use for densifying the gaussians
@@ -116,6 +118,12 @@ class Config:
             type=int,
             choices=[1, 2, 4, 8],
             help="The downscale factor for the input image resolution",
+        )
+        parser.add_argument(
+            "--holdout_view_index",
+            default=0,
+            type=int,
+            help="the test set index for the holdout view",
         )
         parser.add_argument(
             "--strategy_type",
@@ -256,5 +264,7 @@ class Config:
         config.sh_degree_interval = parsed_args.sh_degree_interval
         config.wandb_project_name = parsed_args.wandb_project_name
         config.run_name = parsed_args.run_name
+        config.image_downscale = parsed_args.image_downscale
+        parser.holdout_view_index = parsed_args.holdout_view_index
 
         return config

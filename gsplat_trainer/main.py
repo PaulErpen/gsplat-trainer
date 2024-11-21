@@ -20,7 +20,7 @@ import torch
 def create_holdout_view_handler(
     test_dataset: NVSDataset, device: str, config: Config
 ) -> HoldoutViewHandler:
-    pose, image, alpha, intrinsics = test_dataset[0]
+    pose, image, alpha, intrinsics = test_dataset[config.holdout_view_index]
     H, W, C = image.shape
     return HoldoutViewHandler(
         holdout_view_matrix=pose,
