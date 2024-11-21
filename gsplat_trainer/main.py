@@ -49,7 +49,8 @@ if __name__ == "__main__":
 
     holdout_view_handler = create_holdout_view_handler(test_split, device, config)
 
-    print(f"Initialize model and strategy using scene scale: {train_split.norm.radius}")
+    scene_scale = train_split.norm.radius / config.image_downscale
+    print(f"Initialize model and strategy using scene scale: {scene_scale}")
 
     initial_model = GaussianModel.from_point_cloud(
         pcd=train_split.pcd,
