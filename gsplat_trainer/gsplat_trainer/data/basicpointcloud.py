@@ -11,7 +11,7 @@ class BasicPointCloud(NamedTuple):
     normals: np.array
 
     @classmethod
-    def fetchPly(cls, path):
+    def fetchPly(cls, path) -> "BasicPointCloud":
         plydata = PlyData.read(path)
         vertices = plydata["vertex"]
         positions = np.vstack([vertices["x"], vertices["y"], vertices["z"]]).T
