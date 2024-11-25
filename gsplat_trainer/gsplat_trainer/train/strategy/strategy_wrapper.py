@@ -10,12 +10,12 @@ class Strategy:
         if config.strategy_type == "mcmc":
             self.strategy = MCMCStrategy(
                 cap_max=config.cap_max,
-                # noise_lr=config.noise_lr,
-                # refine_start_iter=config.refine_start_iter,
-                # refine_stop_iter=config.refine_stop_iter,
-                # refine_every=config.refine_every,
-                # min_opacity=config.min_opacity,
-                # verbose=config.verbose,
+                noise_lr=config.noise_lr,
+                refine_start_iter=config.refine_start_iter,
+                refine_stop_iter=config.refine_stop_iter,
+                refine_every=config.refine_every,
+                min_opacity=config.min_opacity,
+                verbose=config.verbose,
             )
             self.strategy_state = self.strategy.initialize_state()
         elif config.strategy_type == "default":
