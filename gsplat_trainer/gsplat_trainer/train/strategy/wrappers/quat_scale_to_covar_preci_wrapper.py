@@ -17,6 +17,10 @@ def mocked_quat_scale_to_covar_preci(
 try:
     from gsplat import quat_scale_to_covar_preci as actual_quat_scale_to_covar_preci
 
+    assert torch.cuda.is_available(), "Cuda is not available, yet the \"quat_scale_to_covar_preci\" is not being mocked!" 
+
     quat_scale_to_covar_preci = actual_quat_scale_to_covar_preci
 except ImportError:
     quat_scale_to_covar_preci = mocked_quat_scale_to_covar_preci
+
+    assert torch.cuda.is_available() == False, "Cuda is available, yet the \"quat_scale_to_covar_preci\" is being mocked!" 
