@@ -172,15 +172,15 @@ class SimpleTrainer:
 
             tqdm_progress.set_postfix({"Loss": loss.item()})
 
-            if (
-                self.holdout_view_handler is not None
-                and iter % self.config.holdout_view_frequency == 0
-            ):
-                self.holdout_view_handler.compute_holdout_view(
-                    self.gaussian_model, sh_degree_to_use
-                )
-
             with torch.no_grad():
+                if (
+                    self.holdout_view_handler is not None
+                    and iter % self.config.holdout_view_frequency == 0
+                ):
+                    self.holdout_view_handler.compute_holdout_view(
+                        self.gaussian_model, sh_degree_to_use
+                    )
+                    
                 self.cum_created = self.cum_created + n_created
                 self.cum_deleted = self.cum_deleted + n_deleted
                 if self.logger is not None:
