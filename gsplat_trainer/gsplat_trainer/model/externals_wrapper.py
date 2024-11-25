@@ -71,10 +71,10 @@ def mocked_dist_cuda_2(points: np.array) -> torch.Tensor:
 
 try:
     from gsplat import rasterization
-    from simple_knn._C import distCUDA2
+    from simple_knn._C import distCUDA2 as distCUDA2imp
 
     rasterization = rasterization
-    distCUDA2 = lambda some_tensor: distCUDA2(some_tensor.cuda())
+    distCUDA2 = lambda some_tensor: distCUDA2imp(some_tensor.cuda())
 
     assert (
         torch.cuda.is_available()
