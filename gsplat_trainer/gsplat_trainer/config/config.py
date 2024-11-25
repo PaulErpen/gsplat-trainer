@@ -164,7 +164,7 @@ class Config:
         )
         parser.add_argument(
             "--test_iterations",
-            type=List,
+            type=int,
             default=[1, 500, 1000, 5000, 7500, 9000, 10000],
             nargs="+",
         )
@@ -266,5 +266,6 @@ class Config:
         config.run_name = parsed_args.run_name
         config.image_downscale = parsed_args.image_downscale
         config.holdout_view_index = parsed_args.holdout_view_index
+        config.reset_every = parsed_args.reset_every
 
         return config
