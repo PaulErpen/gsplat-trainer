@@ -74,7 +74,7 @@ try:
     from simple_knn._C import distCUDA2
 
     rasterization = rasterization
-    distCUDA2 = distCUDA2
+    distCUDA2 = lambda some_tensor: distCUDA2(some_tensor.cuda())
 
     assert (
         torch.cuda.is_available()
