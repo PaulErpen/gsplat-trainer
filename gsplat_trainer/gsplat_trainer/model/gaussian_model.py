@@ -1,7 +1,6 @@
 from gsplat_trainer.colors.colors import rgb_to_sh
 from gsplat_trainer.data.basicpointcloud import BasicPointCloud
 from gsplat_trainer.model.externals_wrapper import distCUDA2, rasterization
-from gsplat_trainer.model.model_utils import inverse_sigmoid
 from torch import nn
 import torch
 import numpy as np
@@ -20,7 +19,13 @@ class GaussianModel(nn.Module):
 
     @classmethod
     def from_point_cloud(
-        cls, pcd: BasicPointCloud, scene_scale: float, sh_degree: int = 3, device="cpu"
+        cls,
+        pcd: BasicPointCloud,
+        scene_scale: float,
+        sh_degree: int = 3,
+        device="cpu",
+        init_scale=1.0,
+        init_opa=0.1,
     ):
         points = torch.tensor(np.asarray(pcd.points)).float()
         num_points = points.shape[0]
@@ -32,10 +37,10 @@ class GaussianModel(nn.Module):
         dist2 = torch.clamp_min(
             distCUDA2(torch.from_numpy(np.asarray(pcd.points)).float()), 0.0000001
         )
-        scales = torch.log(torch.sqrt(dist2))[..., None].repeat(1, 3)
+        scales = torch.log(torch.sqrt(dist2) * init_scale)[..., None].repeat(1, 3)
 
-        opacities = inverse_sigmoid(
-            0.1 * torch.ones((num_points), dtype=torch.float, device=device)
+        opacities = torch.logit(
+            init_opa * torch.ones((num_points), dtype=torch.float, device=device)
         )
 
         params = nn.ParameterDict(

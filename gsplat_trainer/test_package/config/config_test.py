@@ -47,10 +47,16 @@ class ConfigTest(unittest.TestCase):
                 "max_steps", ["--max_steps", "128"], 128
             ),
             "opacity_reg": ClassValueParamsAndResult(
-                "opacity_reg", ["--opacity_reg", "0.123"], 0.123
+                "opacity_reg", ["--opacity_reg_override", "0.123"], 0.123
             ),
             "scale_reg": ClassValueParamsAndResult(
-                "scale_reg", ["--scale_reg", "0.456"], 0.456
+                "scale_reg", ["--scale_reg_override", "0.456"], 0.456
+            ),
+            "init_opa": ClassValueParamsAndResult(
+                "init_opa", ["--init_opa_override", "0.898432"], 0.898432
+            ),
+            "init_scale": ClassValueParamsAndResult(
+                "init_scale", ["--init_scale_override", "0.923482"], 0.923482
             ),
             "holdout_view_frequency": ClassValueParamsAndResult(
                 "holdout_view_frequency", ["--holdout_view_frequency", "2918"], 2918

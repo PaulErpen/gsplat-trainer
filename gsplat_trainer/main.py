@@ -56,6 +56,8 @@ if __name__ == "__main__":
         scene_scale=train_split.norm.radius,
         sh_degree=config.sh_degree,
         device=device,
+        init_opa=config.init_opa,
+        init_scale=config.init_scale,
     )
 
     strategy = Strategy(config=config, scene_radius=train_split.norm.radius)

@@ -17,6 +17,10 @@ class Config:
     init_num_gaussians: int = 2000
     # The number of spherical harmonics degrees to compute the color
     sh_degree: int = 3
+    # Initial opacity of GS
+    init_opa: float = 0.1
+    # Initial scale of GS
+    init_scale: float = 1.0
 
     # RENDERING
     # Use packed mode for rasterization, this leads to less memory usage but slightly slower.
@@ -71,6 +75,19 @@ class Config:
     wandb_project_name: str = "gs-on-a-budget"
     # the run name for this praticular traning instance (should ideally be unique)
     run_name: str = ""
+
+    @staticmethod
+    def set_strategy_defaults(config: "Config") -> None:
+        if config.strategy_type == "mcmc":
+            config.opacity_reg = 0.01
+            config.scale_reg = 0.01
+            config.init_opa = 0.5
+            config.init_scale = 0.1
+        if config.strategy_type == "default":
+            config.opacity_reg = 0.0
+            config.scale_reg = 0.0
+            config.init_opa = 0.1
+            config.init_scale = 1.0
 
     @classmethod
     def from_cli_args(cls, args: Sequence[str]) -> "Config":
@@ -139,16 +156,24 @@ class Config:
             help="Number of training steps",
         )
         parser.add_argument(
-            "--opacity_reg",
+            "--opacity_reg_override",
             type=float,
-            default=0.0,
-            help="Opacity regularization",
+            help="Opacity regularization override, default values should be ideal.",
         )
         parser.add_argument(
-            "--scale_reg",
+            "--scale_reg_override",
             type=float,
-            default=0.0,
-            help="Scale regularization",
+            help="Scale regularization, default values should be ideal.",
+        )
+        parser.add_argument(
+            "--init_opa_override",
+            type=float,
+            help="Initial opacity override, default values should be ideal.",
+        )
+        parser.add_argument(
+            "--init_scale_override",
+            type=float,
+            help="Initial scale override, default values should be ideal.",
         )
         parser.add_argument(
             "--holdout_view_frequency",
@@ -239,6 +264,8 @@ class Config:
         parsed_args = parser.parse_args(args)
         config: "Config" = cls()
 
+        cls.set_strategy_defaults(config)
+
         config.dataset_path = parsed_args.dataset_path
         config.output_path = parsed_args.output_path
         config.init_num_gaussians = parsed_args.init_num_gaussians
@@ -249,8 +276,14 @@ class Config:
         )
         config.strategy_type = parsed_args.strategy_type
         config.max_steps = parsed_args.max_steps
-        config.opacity_reg = parsed_args.opacity_reg
-        config.scale_reg = parsed_args.scale_reg
+        if parsed_args.opacity_reg_override is not None:
+            config.opacity_reg = parsed_args.opacity_reg_override
+        if parsed_args.scale_reg_override is not None:
+            config.scale_reg = parsed_args.scale_reg_override
+        if parsed_args.init_opa_override is not None:
+            config.init_opa = parsed_args.init_opa_override
+        if parsed_args.init_scale_override is not None:
+            config.init_scale = parsed_args.init_scale_override
         config.holdout_view_frequency = parsed_args.holdout_view_frequency
         config.ssim_lambda = parsed_args.ssim_lambda
         config.test_iterations = parsed_args.test_iterations
