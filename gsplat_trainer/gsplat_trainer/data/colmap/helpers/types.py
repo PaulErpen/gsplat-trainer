@@ -47,5 +47,6 @@ class CameraInfo(NamedTuple):
     image_name: str
     width: int
     height: int
-    intrinsics: torch.Tensor
+    focal_length_x: float
+    focal_length_y: float
     cam_center: np.array = None

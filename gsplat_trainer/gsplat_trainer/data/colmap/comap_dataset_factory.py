@@ -3,6 +3,9 @@ from typing import Dict, List, Literal
 
 from gsplat_trainer.data.basicpointcloud import BasicPointCloud
 from gsplat_trainer.data.blender.blender_util import compute_intrinsics_matrix
+from gsplat_trainer.data.colmap.helpers.camera_helpers import (
+    compute_intrinsics_matrix_pinhole,
+)
 from gsplat_trainer.data.colmap.helpers.read_cameras import readColmapCameras
 from gsplat_trainer.data.colmap.helpers.read_extrinsics import read_extrinsics_binary
 from gsplat_trainer.data.colmap.helpers.read_intrinsics import read_intrinsics_binary
@@ -68,7 +71,17 @@ class ColmapDatasetFactory(DatasetFactory):
             poses = torch.stack(
                 [torch.from_numpy(getWorld2View2(c.R, c.T)) for c in train_cam_infos]
             ).float()
-            intrinsics = torch.stack([c.intrinsics for c in train_cam_infos]).float()
+            intrinsics = torch.stack(
+                [
+                    compute_intrinsics_matrix_pinhole(
+                        c.focal_length_x / image_downscale_factor,
+                        c.focal_length_y / image_downscale_factor,
+                        c.width / image_downscale_factor,
+                        c.height / image_downscale_factor,
+                    )
+                    for c in train_cam_infos
+                ]
+            ).float()
             images = torch.stack(
                 [
                     image_downscale(c.image, image_downscale_factor)[..., :3]
@@ -95,7 +108,17 @@ class ColmapDatasetFactory(DatasetFactory):
             poses = torch.stack(
                 [torch.from_numpy(getWorld2View2(c.R, c.T)) for c in test_cam_infos]
             ).float()
-            intrinsics = torch.stack([c.intrinsics for c in test_cam_infos]).float()
+            intrinsics = torch.stack(
+                [
+                    compute_intrinsics_matrix_pinhole(
+                        c.focal_length_x / image_downscale_factor,
+                        c.focal_length_y / image_downscale_factor,
+                        c.width / image_downscale_factor,
+                        c.height / image_downscale_factor,
+                    )
+                    for c in test_cam_infos
+                ]
+            ).float()
             images = torch.stack(
                 [
                     image_downscale(c.image, image_downscale_factor)[..., :3]
