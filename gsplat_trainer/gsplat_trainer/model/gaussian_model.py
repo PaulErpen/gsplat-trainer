@@ -20,7 +20,7 @@ class GaussianModel(nn.Module):
 
     @classmethod
     def from_point_cloud(
-        cls, pcd: BasicPointCloud, scene_scale: float, sh_degree: int = 3
+        cls, pcd: BasicPointCloud, scene_scale: float, sh_degree: int = 3, device="cpu"
     ):
         points = torch.tensor(np.asarray(pcd.points)).float()
         num_points = points.shape[0]
@@ -34,7 +34,9 @@ class GaussianModel(nn.Module):
         )
         scales = torch.log(torch.sqrt(dist2))[..., None].repeat(1, 3)
 
-        opacities = inverse_sigmoid(0.1 * torch.ones((num_points), dtype=torch.float))
+        opacities = inverse_sigmoid(
+            0.1 * torch.ones((num_points), dtype=torch.float, device=device)
+        )
 
         params = nn.ParameterDict(
             {

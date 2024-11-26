@@ -55,6 +55,7 @@ if __name__ == "__main__":
         pcd=train_split.pcd,
         scene_scale=train_split.norm.radius,
         sh_degree=config.sh_degree,
+        device=device,
     )
 
     strategy = Strategy(config=config, scene_radius=train_split.norm.radius)
