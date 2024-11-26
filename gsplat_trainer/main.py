@@ -100,7 +100,7 @@ if __name__ == "__main__":
 
         final_model = simple_trainer.train()
 
-        save_ply(final_model, f"{config.output_path}/final_model.ply")
+        save_ply(final_model, f"{config.output_path}/{config.run_name}_model.ply")
 
     finally:
         logger.finish()
