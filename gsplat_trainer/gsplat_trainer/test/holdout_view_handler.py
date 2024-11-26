@@ -1,3 +1,4 @@
+from typing import List
 from gsplat_trainer.model.gaussian_model import GaussianModel
 import torch
 from PIL import Image
@@ -13,15 +14,17 @@ class HoldoutViewHandler:
                  H: int,
                  out_dir: str,
                  bg_color: torch.Tensor | None,
-                 device="cuda"):
+                 device="cuda",
+                 thumbnail_size=(600, 600)):
         self.holdout_view_matrix = holdout_view_matrix.to(torch.float32)
         self.K = K.to(torch.float32)
         self.W = W
         self.H = H
-        self.frames = []
+        self.frames: List[Image.Image] = []
         self.bg_color = bg_color
         self.device = device
         self.out_dir = Path(out_dir)
+        self.thumbnail_size = thumbnail_size
 
     def to(self, device: str) -> None:
         self.device = device
@@ -40,16 +43,17 @@ class HoldoutViewHandler:
         )
         out_img = renders[0]
         out_img = torch.clamp(out_img, 0.0, 1.0)
-        self.frames.append((out_img.detach().cpu().numpy() * 255).astype(np.uint8))
+        image = Image.fromarray((out_img.detach().cpu().numpy() * 255).astype(np.uint8))
+        image.thumbnail(self.thumbnail_size)
+        self.frames.append(image)
 
     def export_gif(self):
-      frames = [Image.fromarray(frame) for frame in self.frames]
       export_dir = Path(os.getcwd()) / self.out_dir
       os.makedirs(self.out_dir, exist_ok=True)
-      frames[0].save(
+      self.frames[0].save(
           f"{export_dir}/training.gif",
           save_all=True,
-          append_images=frames[1:],
+          append_images=self.frames[1:],
           optimize=False,
           duration=5,
           loop=0,

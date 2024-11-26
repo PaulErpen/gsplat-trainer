@@ -5,6 +5,7 @@ import torch
 from gsplat_trainer.model.gaussian_model import GaussianModel
 from torch import nn
 import os
+from PIL import Image
 
 
 class HoldoutviewHandlerTest(unittest.TestCase):
@@ -44,6 +45,27 @@ class HoldoutviewHandlerTest(unittest.TestCase):
         holdout_view_handler.export_gif()
 
         assert os.path.exists(f"{self.out_path}/training.gif")
+
+    def test_given_a_valid_holdout_view_handler__when_computing_a_set_of_views_and_exporting__then_the_gif_must_have_the_correct_thumbnail_size(
+        self,
+    ) -> None:
+        holdout_view_handler = HoldoutViewHandler(
+            torch.eye(4),
+            torch.eye(3),
+            128,
+            128,
+            bg_color=torch.rand(3),
+            out_dir="unittests/test-renders",
+            device=self.device,
+            thumbnail_size=(120, 120),
+        )
+
+        holdout_view_handler.compute_holdout_view(self.gaussian_model, 3)
+        holdout_view_handler.export_gif()
+
+        image = Image.open(f"{self.out_path}/training.gif")
+
+        self.assertEqual(image.size, (120, 120))
 
     def tearDown(self) -> None:
         shutil.rmtree("unittests/test-renders", ignore_errors=True)
