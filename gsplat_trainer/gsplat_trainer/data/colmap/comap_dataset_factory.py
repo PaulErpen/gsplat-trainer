@@ -54,9 +54,9 @@ class ColmapDatasetFactory(DatasetFactory):
             )
             xyz, rgb, _ = read_points3D_binary(bin_path)
             normals = np.zeros_like(xyz)
-            BasicPointCloud(xyz, rgb, normals).storePly(f"{data_root}/points3d.ply")
+            BasicPointCloud(xyz, rgb, normals).storePly(ply_path)
 
-        pcd = BasicPointCloud.load_initial_points(data_root, max_num_init_points)
+        pcd = BasicPointCloud.load_initial_points(ply_path, max_num_init_points)
 
         assert pcd is not None, "The point-cloud cannot be None after initialization!"
 

@@ -22,9 +22,7 @@ class BasicPointCloud(NamedTuple):
         return cls(points=positions, colors=colors, normals=normals)
 
     @classmethod
-    def load_initial_points(cls, dataset_path: str, num_points: int):
-        ply_path = Path(dataset_path) / Path("points3d.ply")
-
+    def load_initial_points(cls, ply_path: Path, num_points: int):
         if not (ply_path).exists():
             print(f"Generating random point cloud ({num_points})...")
 

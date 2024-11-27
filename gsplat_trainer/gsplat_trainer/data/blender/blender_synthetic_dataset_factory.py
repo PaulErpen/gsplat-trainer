@@ -66,7 +66,7 @@ class BlenderSyntheticDatasetFactory(DatasetFactory):
                 )
 
                 pcd = BasicPointCloud.load_initial_points(
-                    data_root, max_num_init_points
+                    data_root / Path("points3d.ply"), max_num_init_points
                 )
 
                 norm = NerfNorm.from_w2c_stack(poses)

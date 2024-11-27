@@ -15,7 +15,7 @@ class BasicPointcloudTest(unittest.TestCase):
     def test_given_no_initial_point_cloud__when_loading__the_initial_point_cloud_must_exist_afterward(
         self,
     ) -> None:
-        BasicPointCloud.load_initial_points(self.dataset_path, self.num_points)
+        BasicPointCloud.load_initial_points(Path(f"{self.dataset_path}/points3d.ply"), self.num_points)
 
         self.assertTrue(Path(f"{self.dataset_path}/points3d.ply").exists())
 

@@ -29,7 +29,7 @@ class ColmapDatasetFactoryTest(unittest.TestCase):
         )
 
         self.assertTrue(
-            Path(f"{os.getcwd()}/mocked_datasets/backyard/points3d.ply").exists()
+            Path(f"{os.getcwd()}/mocked_datasets/backyard/sparse/0/points3D.ply").exists()
         )
 
     def test_given_a_path_to_a_valid_colmap_dataset__when_initializing__then_the_dataset_must_have_a_train_split(
@@ -207,4 +207,4 @@ class ColmapDatasetFactoryTest(unittest.TestCase):
         self.assertEqual(intrinsics.shape, (3, 3))
 
     def tearDown(self) -> None:
-        os.unlink(f"{os.getcwd()}/mocked_datasets/backyard/points3d.ply")
+        os.unlink(f"{os.getcwd()}/mocked_datasets/backyard/sparse/0/points3D.ply")
