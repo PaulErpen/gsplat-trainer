@@ -28,3 +28,11 @@ class PSNRTest(unittest.TestCase):
         im2 = torch.rand(1, 800, 800, 3)
 
         self.assertTrue(np.isfinite(psnr(im1, im2)))
+    
+    def test_given_two_images_that_are_random__when_computing_the_psnr__then_the_value_must_not_be_nan(
+        self,
+    ) -> None:
+        im1 = torch.rand(1, 800, 800, 3)
+        im2 = torch.rand(1, 800, 800, 3)
+
+        self.assertFalse(np.isnan(psnr(im1, im2)))
