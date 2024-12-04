@@ -23,6 +23,7 @@ class EarlyStoppingHandler:
         self.sh_degree_interval = sh_degree_interval
         self.bg_color = bg_color
 
+    @torch.no_grad()
     def check_continue_at_current_epoch(
         self, gaussian_model: GaussianModel, step: int
     ) -> bool:
