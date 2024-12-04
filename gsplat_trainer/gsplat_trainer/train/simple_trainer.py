@@ -206,7 +206,7 @@ class SimpleTrainer:
                 np.random.shuffle(indeces)
 
                 if self.early_stopping_handler is not None:
-                    if self.early_stopping_handler.check_continue_at_current_epoch(
+                    if not self.early_stopping_handler.check_continue_at_current_epoch(
                         self.gaussian_model, step=iter
                     ):
                         break
