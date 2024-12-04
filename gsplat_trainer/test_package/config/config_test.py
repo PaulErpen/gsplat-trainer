@@ -91,6 +91,12 @@ class ConfigTest(unittest.TestCase):
             "sh_degree_interval": ClassValueParamsAndResult(
                 "sh_degree_interval", ["--sh_degree_interval", "889231"], 889231
             ),
+            "use_early_stopping": ClassValueParamsAndResult(
+                "use_early_stopping", ["--use_early_stopping"], True
+            ),
+            "n_patience_epochs": ClassValueParamsAndResult(
+                "n_patience_epochs", ["--n_patience_epochs", "20"], 20
+            ),
             "reset_every": ClassValueParamsAndResult(
                 "reset_every", ["--reset_every", "43028"], 43028
             ),

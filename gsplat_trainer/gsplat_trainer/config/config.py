@@ -65,6 +65,10 @@ class Config:
     min_opacity: float = 0.005
     # Interval with which the spherical harmonics degree is increased to reach the maximum
     sh_degree_interval: int = 1000
+    # Wether or not to employ an early stopping strategy
+    use_early_stopping: bool = False
+    # How many patience epochs are employed before stopping the training
+    n_patience_epochs: int = 3
 
     # DEFAULT STRATEGY
     # Reset opacities every this steps. Default is 3001
@@ -242,6 +246,18 @@ class Config:
             help="Interval with which the spherical harmonics degree is increased to reach the maximum",
         )
         parser.add_argument(
+            "--use_early_stopping",
+            default=False,
+            action="store_true",
+            help="Wether or not to employ an early stopping strategy",
+        )
+        parser.add_argument(
+            "--n_patience_epochs",
+            type=int,
+            default=3,
+            help="How many patience epochs are employed before stopping the training",
+        )
+        parser.add_argument(
             "--reset_every",
             type=int,
             default=3001,
@@ -295,6 +311,8 @@ class Config:
         config.refine_every = parsed_args.refine_every
         config.min_opacity = parsed_args.min_opacity
         config.sh_degree_interval = parsed_args.sh_degree_interval
+        config.use_early_stopping = parsed_args.use_early_stopping
+        config.n_patience_epochs = parsed_args.n_patience_epochs
         config.wandb_project_name = parsed_args.wandb_project_name
         config.run_name = parsed_args.run_name
         config.image_downscale = parsed_args.image_downscale
