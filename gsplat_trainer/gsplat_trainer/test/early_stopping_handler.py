@@ -1,5 +1,7 @@
+from typing import Optional
 from gsplat_trainer.data.nvs_dataset import NVSDataset
 from gsplat_trainer.image.image_util import add_backround
+from gsplat_trainer.loggers.logger import Logger
 from gsplat_trainer.metrics.ssim import ssim
 from gsplat_trainer.model.gaussian_model import GaussianModel
 import torch
@@ -14,6 +16,7 @@ class EarlyStoppingHandler:
         sh_degree_interval: int,
         bg_color: torch.Tensor,
         device: str,
+        logger: Optional[Logger] = None,
     ) -> None:
         self.test_dataset = test_dataset
         self.device = device
@@ -22,6 +25,7 @@ class EarlyStoppingHandler:
         self.n_patience_epochs = n_patience_epochs
         self.sh_degree_interval = sh_degree_interval
         self.bg_color = bg_color
+        self.logger = logger
 
     @torch.no_grad()
     def check_continue_at_current_epoch(
@@ -60,6 +64,9 @@ class EarlyStoppingHandler:
             )
 
         new_ssim = np.mean(ssims)
+
+        if self.logger != None:
+            self.logger.log({"early_stopping_test/ssim": new_ssim}, iteration=step)
 
         if new_ssim > self.best_ssim:
             self.best_ssim = new_ssim

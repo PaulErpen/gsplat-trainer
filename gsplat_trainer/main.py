@@ -82,6 +82,7 @@ if __name__ == "__main__":
             sh_degree_interval=config.sh_degree_interval,
             bg_color=config.bg_color,
             device=device,
+            logger=logger,
         )
 
     try:
