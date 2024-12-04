@@ -1,4 +1,5 @@
 import sys
+from typing import Optional
 
 from gsplat_trainer.config.config import Config
 from gsplat_trainer.config.export_config import export_configs
@@ -8,6 +9,7 @@ from gsplat_trainer.model_io.ply_handling import save_ply
 from gsplat_trainer.loggers.logger import Logger
 from gsplat_trainer.loggers.logger_factory import LoggerFactory
 from gsplat_trainer.model.gaussian_model import GaussianModel
+from gsplat_trainer.test.early_stopping_handler import EarlyStoppingHandler
 from gsplat_trainer.test.holdout_view_handler import HoldoutViewHandler
 from gsplat_trainer.test.validation_handler import ValidationHandler
 from gsplat_trainer.train.optimizer_factory import OptimizerFactory
@@ -71,6 +73,17 @@ if __name__ == "__main__":
         config.wandb_project_name, config.run_name
     )
 
+    early_stopping_handler: Optional[EarlyStoppingHandler] = None
+
+    if config.use_early_stopping:
+        early_stopping_handler = EarlyStoppingHandler(
+            test_dataset=test_split,
+            n_patience_epochs=config.n_patience_epochs,
+            sh_degree_interval=config.sh_degree_interval,
+            bg_color=config.bg_color,
+            device=device,
+        )
+
     try:
         validation_handler = ValidationHandler(
             train_dataset=train_split,
@@ -94,6 +107,7 @@ if __name__ == "__main__":
             logger=logger,
             validation_handler=validation_handler,
             device=device,
+            early_stopping_handler=early_stopping_handler,
         )
 
         export_configs(config.output_path, config=config, strategy=strategy)

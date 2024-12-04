@@ -7,6 +7,7 @@ from gsplat_trainer.loggers.logger import Logger
 from gsplat_trainer.metrics.psnr import psnr
 from gsplat_trainer.metrics.ssim import ssim
 from gsplat_trainer.model.gaussian_model import GaussianModel
+from gsplat_trainer.test.early_stopping_handler import EarlyStoppingHandler
 from gsplat_trainer.test.holdout_view_handler import HoldoutViewHandler
 from gsplat_trainer.test.validation_handler import ValidationHandler
 from gsplat_trainer.train.strategy.strategy_wrapper import Strategy
@@ -32,6 +33,7 @@ class SimpleTrainer:
         logger: Optional[Logger] = None,
         validation_handler: Optional[ValidationHandler] = None,
         device="cuda",
+        early_stopping_handler: Optional[EarlyStoppingHandler] = None,
     ):
         self.device = device
         self.train_dataset = train_dataset
@@ -56,6 +58,7 @@ class SimpleTrainer:
         self.bg_color = self.config.bg_color.to(self.device)
 
         self.validation_handler = validation_handler
+        self.early_stopping_handler = early_stopping_handler
 
     def train(
         self,
@@ -70,7 +73,9 @@ class SimpleTrainer:
         tqdm_progress = tqdm(range(1, self.config.max_steps + 1), desc="Training")
         for iter in tqdm_progress:
             start = time.time()
-            pose, gt_image, gt_alpha, K = self.train_dataset[indeces[(iter - 1) % len(indeces)]]
+            pose, gt_image, gt_alpha, K = self.train_dataset[
+                indeces[(iter - 1) % len(indeces)]
+            ]
             viewmat = pose.to(self.device)
             K = K.to(self.device)
             gt_image = gt_image.to(self.device)
@@ -180,7 +185,7 @@ class SimpleTrainer:
                     self.holdout_view_handler.compute_holdout_view(
                         self.gaussian_model, sh_degree_to_use
                     )
-                    
+
                 self.cum_created = self.cum_created + n_created
                 self.cum_deleted = self.cum_deleted + n_deleted
                 if self.logger is not None:
@@ -195,8 +200,16 @@ class SimpleTrainer:
 
                 self.validation_handler.handle_validation(self.gaussian_model, iter)
 
-            # shuffle indeces
-            np.random.shuffle(indeces)
+            if iter % len(self.train_dataset) == 0:
+                # epoch end
+                # shuffle indeces
+                np.random.shuffle(indeces)
+
+                if self.early_stopping_handler is not None:
+                    if self.early_stopping_handler.check_continue_at_current_epoch(
+                        self.gaussian_model, step=iter
+                    ):
+                        break
 
         if self.holdout_view_handler is not None:
             self.holdout_view_handler.export_gif()
