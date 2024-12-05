@@ -205,7 +205,14 @@ class SimpleTrainer:
                 # shuffle indeces
                 np.random.shuffle(indeces)
 
-                if self.early_stopping_handler is not None:
+                grace_period_after_opa_reset = (
+                    iter > self.config.refine_start_iter
+                    and iter < self.config.refine_stop_iter
+                    and iter % self.config.refine_every
+                    < self.config.early_stopping_opa_grace_period
+                )
+
+                if self.early_stopping_handler is not None and not grace_period_after_opa_reset:
                     if not self.early_stopping_handler.check_continue_at_current_epoch(
                         self.gaussian_model, step=iter
                     ):

@@ -100,6 +100,11 @@ class ConfigTest(unittest.TestCase):
             "reset_every": ClassValueParamsAndResult(
                 "reset_every", ["--reset_every", "43028"], 43028
             ),
+            "early_stopping_opa_grace_period": ClassValueParamsAndResult(
+                "early_stopping_opa_grace_period",
+                ["--early_stopping_opa_grace_period", "921392"],
+                921392,
+            ),
             "wandb_project_name": ClassValueParamsAndResult(
                 "wandb_project_name",
                 ["--wandb_project_name", "test_wandb_project_name"],

@@ -73,6 +73,8 @@ class Config:
     # DEFAULT STRATEGY
     # Reset opacities every this steps. Default is 3001
     reset_every: int = 3001
+    # A grace period after early opacity reset to prevent the early stopping strategy
+    early_stopping_opa_grace_period: int = 1000
 
     # LOGGING
     # the project in wandb the run is gonna be logged under
@@ -264,6 +266,12 @@ class Config:
             help="Reset opacities every this steps. Default is 3001",
         )
         parser.add_argument(
+            "--early_stopping_opa_grace_period",
+            type=int,
+            default=1000,
+            help="A grace period after early opacity reset to prevent the early stopping strategy"
+        )
+        parser.add_argument(
             "--wandb_project_name",
             type=str,
             default="gs-on-a-budget",
@@ -318,5 +326,6 @@ class Config:
         config.image_downscale = parsed_args.image_downscale
         config.holdout_view_index = parsed_args.holdout_view_index
         config.reset_every = parsed_args.reset_every
+        config.early_stopping_opa_grace_period = parsed_args.early_stopping_opa_grace_period
 
         return config
