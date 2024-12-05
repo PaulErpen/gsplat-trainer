@@ -205,7 +205,7 @@ class SimpleTrainer:
                 # shuffle indeces
                 np.random.shuffle(indeces)
 
-                grace_period_after_opa_reset = (
+                grace_period_after_opa_reset = (iter > self.config.reset_every) and (
                     iter % self.config.reset_every
                     < self.config.early_stopping_opa_grace_period
                 )
