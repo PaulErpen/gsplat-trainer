@@ -68,7 +68,7 @@ class EarlyStoppingHandler:
         if self.logger != None:
             self.logger.log({"early_stopping_test/ssim": new_ssim}, iteration=step)
 
-        if new_ssim > self.best_ssim:
+        if new_ssim > (self.best_ssim + 0.0001):
             self.best_ssim = new_ssim
             self.n_epochs_without_improvement = 0
         else:
