@@ -49,12 +49,13 @@ class HoldoutViewHandler:
         out_img = renders[0]
         out_img = torch.clamp(out_img, 0.0, 1.0)
         image = Image.fromarray((out_img.detach().cpu().numpy() * 255).astype(np.uint8))
-        image.thumbnail(self.thumbnail_size)
         self.frames.append(image)
 
     def export_gif(self) -> None:
         export_dir = Path(os.getcwd()) / self.out_dir
         os.makedirs(self.out_dir, exist_ok=True)
+        for frame in self.frames:
+            frame.thumbnail(self.thumbnail_size)
         self.frames[0].save(
             f"{export_dir}/training.gif",
             save_all=True,
@@ -74,6 +75,11 @@ class HoldoutViewHandler:
             size=self.frames[0].size,
             fps=25,
             codec="libx264",
+            pix_fmt_out="yuv444p",
+            bitrate="8000k",
+            quality=None,
+            macro_block_size=None,
+            output_params=["-preset", "slow", "-crf", "18"],
         )
         writer.send(None)
         try:
