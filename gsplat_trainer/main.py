@@ -32,6 +32,7 @@ def create_holdout_view_handler(
         out_dir=config.output_path,
         bg_color=config.bg_color,
         device=device,
+        thumbnail_size=(1980, 1980),
     )
 
 
