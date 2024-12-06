@@ -72,10 +72,7 @@ class HoldoutViewHandler:
         writer = write_frames(
             path=output_path,
             size=self.frames[0].size,
-            pix_fmt_in="yuv420p",
-            pix_fmt_out="yuv420p",
             fps=25,
-            bitrate="4000k",
             codec="libx264",
         )
         writer.send(None)
