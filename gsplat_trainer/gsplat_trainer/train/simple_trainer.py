@@ -220,7 +220,7 @@ class SimpleTrainer:
                         break
 
         if self.holdout_view_handler is not None:
-            self.holdout_view_handler.export_gif()
+            self.holdout_view_handler.export_mp4()
         print(f"Total(s):\nRasterization: {times[0]:.3f}, Backward: {times[1]:.3f}")
         print(
             f"Per step(s):\nRasterization: {times[0]/self.config.max_steps:.5f}, Backward: {times[1]/self.config.max_steps:.5f}"

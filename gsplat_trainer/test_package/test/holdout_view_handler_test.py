@@ -46,6 +46,24 @@ class HoldoutviewHandlerTest(unittest.TestCase):
 
         assert os.path.exists(f"{self.out_path}/training.gif")
 
+    def test_given_a_valid_holdout_view_handler__when_computing_a_set_of_views_and_exporting_to_mp4__then_the_gif_must_exist(
+        self,
+    ) -> None:
+        holdout_view_handler = HoldoutViewHandler(
+            torch.eye(4),
+            torch.eye(3),
+            128,
+            128,
+            bg_color=torch.rand(3),
+            out_dir="unittests/test-renders",
+            device=self.device,
+        )
+
+        holdout_view_handler.compute_holdout_view(self.gaussian_model, 3)
+        holdout_view_handler.export_mp4()
+
+        assert os.path.exists(f"{self.out_path}/training.mp4")
+
     def test_given_a_valid_holdout_view_handler__when_computing_a_set_of_views_and_exporting__then_the_gif_must_have_the_correct_thumbnail_size(
         self,
     ) -> None:

@@ -5,17 +5,22 @@ from PIL import Image
 import os
 from pathlib import Path
 import numpy as np
+from imageio_ffmpeg import write_frames
+import imageio
+
 
 class HoldoutViewHandler:
-    def __init__(self,
-                 holdout_view_matrix: torch.Tensor,
-                 K: torch.Tensor,
-                 W: int,
-                 H: int,
-                 out_dir: str,
-                 bg_color: torch.Tensor | None,
-                 device="cuda",
-                 thumbnail_size=(600, 600)):
+    def __init__(
+        self,
+        holdout_view_matrix: torch.Tensor,
+        K: torch.Tensor,
+        W: int,
+        H: int,
+        out_dir: str,
+        bg_color: torch.Tensor | None,
+        device="cuda",
+        thumbnail_size=(600, 600),
+    ):
         self.holdout_view_matrix = holdout_view_matrix.to(torch.float32)
         self.K = K.to(torch.float32)
         self.W = W
@@ -47,14 +52,36 @@ class HoldoutViewHandler:
         image.thumbnail(self.thumbnail_size)
         self.frames.append(image)
 
-    def export_gif(self):
-      export_dir = Path(os.getcwd()) / self.out_dir
-      os.makedirs(self.out_dir, exist_ok=True)
-      self.frames[0].save(
-          f"{export_dir}/training.gif",
-          save_all=True,
-          append_images=self.frames[1:],
-          optimize=False,
-          duration=5,
-          loop=0,
+    def export_gif(self) -> None:
+        export_dir = Path(os.getcwd()) / self.out_dir
+        os.makedirs(self.out_dir, exist_ok=True)
+        self.frames[0].save(
+            f"{export_dir}/training.gif",
+            save_all=True,
+            append_images=self.frames[1:],
+            optimize=False,
+            duration=5,
+            loop=0,
         )
+
+    def export_mp4(self) -> None:
+        export_dir = Path(os.getcwd()) / self.out_dir
+        output_path = f"{export_dir}/training.mp4"
+        os.makedirs(self.out_dir, exist_ok=True)
+
+        writer = write_frames(
+            path=output_path,
+            size=self.frames[0].size,
+            pix_fmt_in="yuv420p",
+            pix_fmt_out="yuv420p",
+            fps=25,
+            bitrate="4000k",
+            codec="libx264",
+        )
+        writer.send(None)
+        try:
+            for image in self.frames:
+                frame = np.array(image.convert("RGB"))
+                writer.send(frame)
+        finally:
+            writer.close()
