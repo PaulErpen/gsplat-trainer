@@ -200,11 +200,11 @@ class SimpleTrainer:
 
                 self.validation_handler.handle_validation(self.gaussian_model, iter)
 
+            # shuffle indeces
+            np.random.shuffle(indeces)
+
             if iter % len(self.train_dataset) == 0:
                 # epoch end
-                # shuffle indeces
-                np.random.shuffle(indeces)
-
                 grace_period_after_opa_reset = (iter > self.config.reset_every) and (
                     iter % self.config.reset_every
                     < self.config.early_stopping_opa_grace_period
