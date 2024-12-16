@@ -28,7 +28,7 @@ class Config:
     # The background color to use to render the splats (is also pasted "under" the train and test images)
     bg_color: torch.tensor = field(default_factory=lambda: torch.ones((3,)))
     # the downscale factor for the input image resolution
-    image_downscale: Literal[1, 2, 4, 8] = 1
+    image_downscale: Literal[-1, 1, 2, 4, 8] = -1
     # the test set index for the holdout view
     holdout_view_index: int = 0
 
@@ -137,9 +137,9 @@ class Config:
         )
         parser.add_argument(
             "--image_downscale",
-            default=1,
+            default=-1,
             type=int,
-            choices=[1, 2, 4, 8],
+            choices=[-1, 1, 2, 4, 8],
             help="The downscale factor for the input image resolution",
         )
         parser.add_argument(

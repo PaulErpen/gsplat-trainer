@@ -25,7 +25,7 @@ class ColmapDatasetFactory(DatasetFactory):
         data_root: str,
         splits: List[Literal["train", "test"]],
         max_num_init_points: int,
-        image_downscale_factor: Literal[1, 2, 4, 8] = 1,
+        image_downscale_factor: Literal[-1, 1, 2, 4, 8] = 1,
         holdout_interval=8,
     ):
         data_root = Path(data_root)

@@ -12,7 +12,7 @@ class GraphicsHelperTest(unittest.TestCase):
     def setUp(self) -> None:
         self.to_pil_image = transforms.ToPILImage()
 
-    def test_given_a_image_with_w_800_and_h_900__when_downscaling_by_2__then_the_resolution_must_by_correct(
+    def test_given_a_image_with_w_800_and_h_900__when_downscaling_by_2__then_the_resolution_must_be_correct(
         self,
     ) -> None:
         W = 800
@@ -22,16 +22,30 @@ class GraphicsHelperTest(unittest.TestCase):
 
         self.assertEqual(image_downscale(image, 2).shape, (450, 400, 3))
 
-    def test_given_a_lego_image__when_downscaling_by_2__then_the_resolution_must_by_correct(
+    def test_given_a_lego_image__when_downscaling_by_2__then_the_resolution_must_be_correct(
         self,
     ) -> None:
         image = PIL.Image.open(f"{os.getcwd()}/mocked_datasets/lego/train/r_0.png")
 
         self.assertEqual(image_downscale(image, 2).shape, (400, 400, 4))
     
-    def test_given_a_backyard_image__when_downscaling_by_2__then_the_resolution_must_by_correct(
+    def test_given_a_backyard_image__when_downscaling_by_2__then_the_resolution_must_be_correct(
         self,
     ) -> None:
         image = PIL.Image.open(f"{os.getcwd()}/mocked_datasets/backyard/images/IMG_1130.JPG")
 
         self.assertEqual(image_downscale(image, 2).shape, (1071, 1428, 3))
+    
+    def test_given_a_backyard_image__when_not_downscaling__then_the_resolution_must_be_correct(
+        self,
+    ) -> None:
+        image = PIL.Image.open(f"{os.getcwd()}/mocked_datasets/backyard/images/IMG_1130.JPG")
+
+        self.assertEqual(image_downscale(image, 1).shape, (2142, 2856, 3))
+    
+    def test_given_a_backyard_image__when_downscaling_by_negative_1__then_the_resolution_must_be_correct(
+        self,
+    ) -> None:
+        image = PIL.Image.open(f"{os.getcwd()}/mocked_datasets/backyard/images/IMG_1130.JPG")
+
+        self.assertEqual(image_downscale(image, -1).shape, (1200, 1600, 3))
