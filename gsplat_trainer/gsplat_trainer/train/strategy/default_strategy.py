@@ -175,12 +175,14 @@ class DefaultStrategy(Strategy):
             and step % self.reset_every >= self.pause_refine_after_reset
         ):
             # grow GSs
+            n_before = params["means"].shape[0]
             n_dupli, n_split = self._grow_gs(params, optimizers, state, step)
             if self.verbose:
                 print(
                     f"Step {step}: {n_dupli} GSs duplicated, {n_split} GSs split. "
                     f"Now having {len(params['means'])} GSs."
                 )
+            n_after_grow = params["means"].shape[0]
 
             # prune GSs
             n_prune = self._prune_gs(params, optimizers, state, step)
@@ -189,6 +191,7 @@ class DefaultStrategy(Strategy):
                     f"Step {step}: {n_prune} GSs pruned. "
                     f"Now having {len(params['means'])} GSs."
                 )
+            n_after_prune = params["means"].shape[0]
 
             # reset running stats
             state["grad2d"].zero_()
@@ -209,7 +212,7 @@ class DefaultStrategy(Strategy):
         assert isinstance(n_split, Number), f"n_split is not a Number! but instead {n_split} - {n_split.__class__.__name__}"
         assert isinstance(n_prune, Number), f"n_prune is not a Number! but instead {n_prune} - {n_prune.__class__.__name__}"
 
-        return n_dupli + n_split, n_prune
+        return n_after_grow - n_before, n_after_grow - n_after_prune
 
     def _update_state(
         self,
