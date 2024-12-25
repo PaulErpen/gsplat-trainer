@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from numbers import Number
 from typing import Any, Dict, Tuple, Union
 
 from gsplat_trainer.train.strategy.strategy_utils import get_top_k_indices
@@ -203,6 +204,11 @@ class DefaultStrategy(Strategy):
                 state=state,
                 value=self.prune_opa * 2.0,
             )
+
+        assert isinstance(n_dupli, Number), f"n_dupli is not a Number! but instead {n_dupli} - {n_dupli.__class__.__name__}"
+        assert isinstance(n_split, Number), f"n_split is not a Number! but instead {n_split} - {n_split.__class__.__name__}"
+        assert isinstance(n_prune, Number), f"n_prune is not a Number! but instead {n_prune} - {n_prune.__class__.__name__}"
+
         return n_dupli + n_split, n_prune
 
     def _update_state(
