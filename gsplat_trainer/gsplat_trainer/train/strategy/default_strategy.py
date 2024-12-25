@@ -168,6 +168,7 @@ class DefaultStrategy(Strategy):
         self._update_state(params, state, info, packed=packed)
 
         n_dupli, n_split, n_prune = 0, 0, 0
+        n_after_grow, n_before, n_after_prune = 0, 0, 0
 
         if (
             step > self.refine_start_iter
