@@ -142,7 +142,7 @@ class SimpleTrainer:
                     torch.relu(
                         torch.norm(
                             self.gaussian_model.params["means"]
-                            - self.train_dataset.norm.translation
+                            - self.train_dataset.norm.translation.unsqueeze(0).to(self.device)
                         )
                         / (self.train_dataset.norm.radius * 10.0)
                         - 1.0
