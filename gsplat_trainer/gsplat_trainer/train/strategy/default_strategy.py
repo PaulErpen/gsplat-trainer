@@ -163,7 +163,7 @@ class DefaultStrategy(Strategy):
     ) -> Tuple[int, int]:
         """Callback function to be executed after the `loss.backward()` call."""
         if step >= self.refine_stop_iter:
-            return 0, 0, 0
+            return 0, 0
 
         self._update_state(params, state, info, packed=packed)
 
