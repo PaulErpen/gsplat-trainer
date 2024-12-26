@@ -127,7 +127,10 @@ class ColmapDatasetFactory(DatasetFactory):
         for c in train_cam_infos:
             down_x, down_y = 1.0, 1.0
             if image_downscale_factor == -1:
-                down_x, down_y = compute_resolution(c.image) / c.image.size
+                W, H = c.image.size
+                down_x, down_y = compute_resolution(c.image)
+                down_x = down_x / W
+                down_y = down_y / H
             intrinsics.append(
                 compute_intrinsics_matrix_pinhole(
                     c.focal_length_x / image_downscale_factor * down_x,
