@@ -14,7 +14,7 @@ from gsplat_trainer.data.dataset_factory import DatasetFactory
 from gsplat_trainer.data.nerfnorm import NerfNorm
 from gsplat_trainer.data.nvs_dataset import NVSDataset
 from gsplat_trainer.geometry.geometry_utils import getWorld2View2
-from gsplat_trainer.graphics.graphics_helpers import image_downscale
+from gsplat_trainer.graphics.graphics_helpers import compute_resolution, image_downscale
 import numpy as np
 import torch
 
@@ -71,17 +71,9 @@ class ColmapDatasetFactory(DatasetFactory):
             poses = torch.stack(
                 [torch.from_numpy(getWorld2View2(c.R, c.T)) for c in train_cam_infos]
             ).float()
-            intrinsics = torch.stack(
-                [
-                    compute_intrinsics_matrix_pinhole(
-                        c.focal_length_x / image_downscale_factor,
-                        c.focal_length_y / image_downscale_factor,
-                        c.width / image_downscale_factor,
-                        c.height / image_downscale_factor,
-                    )
-                    for c in train_cam_infos
-                ]
-            ).float()
+            intrinsics = self.compute_intrinsics_stack(
+                image_downscale_factor, train_cam_infos
+            )
             images = torch.stack(
                 [
                     image_downscale(c.image, image_downscale_factor)[..., :3]
@@ -108,17 +100,9 @@ class ColmapDatasetFactory(DatasetFactory):
             poses = torch.stack(
                 [torch.from_numpy(getWorld2View2(c.R, c.T)) for c in test_cam_infos]
             ).float()
-            intrinsics = torch.stack(
-                [
-                    compute_intrinsics_matrix_pinhole(
-                        c.focal_length_x / image_downscale_factor,
-                        c.focal_length_y / image_downscale_factor,
-                        c.width / image_downscale_factor,
-                        c.height / image_downscale_factor,
-                    )
-                    for c in test_cam_infos
-                ]
-            ).float()
+            intrinsics = self.compute_intrinsics_stack(
+                image_downscale_factor, test_cam_infos
+            )
             images = torch.stack(
                 [
                     image_downscale(c.image, image_downscale_factor)[..., :3]
@@ -135,6 +119,24 @@ class ColmapDatasetFactory(DatasetFactory):
                 pcd=pcd,
                 norm=nerf_norm,
             )
+
+    def compute_intrinsics_stack(
+        self, image_downscale_factor, train_cam_infos
+    ) -> torch.Tensor:
+        intrinsics = []
+        for c in train_cam_infos:
+            res_x, res_y = 1.0, 1.0
+            if image_downscale_factor == -1:
+                res_x, res_y = compute_resolution(c.image)
+            intrinsics.append(
+                compute_intrinsics_matrix_pinhole(
+                    c.focal_length_x / image_downscale_factor * res_x,
+                    c.focal_length_y / image_downscale_factor * res_y,
+                    c.width / image_downscale_factor * res_x,
+                    c.height / image_downscale_factor * res_y,
+                )
+            )
+        return torch.stack(intrinsics).float()
 
     def get_split(self, split: str) -> NVSDataset:
         return self.splits[split]
