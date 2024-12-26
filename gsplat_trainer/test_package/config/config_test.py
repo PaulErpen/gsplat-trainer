@@ -52,6 +52,9 @@ class ConfigTest(unittest.TestCase):
             "scale_reg": ClassValueParamsAndResult(
                 "scale_reg", ["--scale_reg_override", "0.456"], 0.456
             ),
+            "distance_reg": ClassValueParamsAndResult(
+                "distance_reg", ["--distance_reg", "0.92132"], 0.92132
+            ),
             "init_opa": ClassValueParamsAndResult(
                 "init_opa", ["--init_opa_override", "0.898432"], 0.898432
             ),

@@ -41,6 +41,8 @@ class Config:
     opacity_reg: float = 0.0
     # Scale regularization
     scale_reg: float = 0.0
+    # Distance regularization
+    distance_reg: float = 0.0
     # the frequency with which holdout views are created
     holdout_view_frequency: int = 100
     # the amount of ssim included in the loss
@@ -172,6 +174,12 @@ class Config:
             help="Scale regularization, default values should be ideal.",
         )
         parser.add_argument(
+            "--distance_reg",
+            type=float,
+            default=0.0,
+            help="Distance from center regularization, especially needed for mcmc to avoid size explosion",
+        )
+        parser.add_argument(
             "--init_opa_override",
             type=float,
             help="Initial opacity override, default values should be ideal.",
@@ -269,7 +277,7 @@ class Config:
             "--early_stopping_opa_grace_period",
             type=int,
             default=1000,
-            help="A grace period after early opacity reset to prevent the early stopping strategy"
+            help="A grace period after early opacity reset to prevent the early stopping strategy",
         )
         parser.add_argument(
             "--wandb_project_name",
@@ -308,6 +316,7 @@ class Config:
             config.init_opa = parsed_args.init_opa_override
         if parsed_args.init_scale_override is not None:
             config.init_scale = parsed_args.init_scale_override
+        config.distance_reg = parsed_args.distance_reg
         config.holdout_view_frequency = parsed_args.holdout_view_frequency
         config.ssim_lambda = parsed_args.ssim_lambda
         config.test_iterations = parsed_args.test_iterations
@@ -326,6 +335,8 @@ class Config:
         config.image_downscale = parsed_args.image_downscale
         config.holdout_view_index = parsed_args.holdout_view_index
         config.reset_every = parsed_args.reset_every
-        config.early_stopping_opa_grace_period = parsed_args.early_stopping_opa_grace_period
+        config.early_stopping_opa_grace_period = (
+            parsed_args.early_stopping_opa_grace_period
+        )
 
         return config

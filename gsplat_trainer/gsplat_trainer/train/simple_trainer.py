@@ -137,6 +137,18 @@ class SimpleTrainer:
                     * torch.abs(torch.exp(self.gaussian_model.params["scales"])).mean()
                 )
 
+            if self.config.distance_reg > 0.0:
+                loss = loss + self.config.distance_reg * (
+                    torch.relu(
+                        torch.norm(
+                            self.gaussian_model.params["means"]
+                            - self.train_dataset.norm.translation
+                        )
+                        / (self.train_dataset.norm.radius * 10.0)
+                        - 1.0
+                    )
+                )
+
             if self.logger is not None:
                 self.logger.log(
                     {
