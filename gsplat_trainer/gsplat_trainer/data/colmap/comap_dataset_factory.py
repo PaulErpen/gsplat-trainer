@@ -133,10 +133,10 @@ class ColmapDatasetFactory(DatasetFactory):
                 down_y = down_y / H
             intrinsics.append(
                 compute_intrinsics_matrix_pinhole(
-                    c.focal_length_x / image_downscale_factor * down_x,
-                    c.focal_length_y / image_downscale_factor * down_y,
-                    c.width / image_downscale_factor * down_x,
-                    c.height / image_downscale_factor * down_y,
+                    c.focal_length_x / abs(image_downscale_factor) * down_x,
+                    c.focal_length_y / abs(image_downscale_factor) * down_y,
+                    c.width / abs(image_downscale_factor) * down_x,
+                    c.height / abs(image_downscale_factor) * down_y,
                 )
             )
         return torch.stack(intrinsics).float()
