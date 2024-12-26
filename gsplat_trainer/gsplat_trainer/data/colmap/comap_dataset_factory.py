@@ -125,15 +125,15 @@ class ColmapDatasetFactory(DatasetFactory):
     ) -> torch.Tensor:
         intrinsics = []
         for c in train_cam_infos:
-            res_x, res_y = 1.0, 1.0
+            down_x, down_y = 1.0, 1.0
             if image_downscale_factor == -1:
-                res_x, res_y = compute_resolution(c.image)
+                down_x, down_y = compute_resolution(c.image) / c.image.size
             intrinsics.append(
                 compute_intrinsics_matrix_pinhole(
-                    c.focal_length_x / image_downscale_factor * res_x,
-                    c.focal_length_y / image_downscale_factor * res_y,
-                    c.width / image_downscale_factor * res_x,
-                    c.height / image_downscale_factor * res_y,
+                    c.focal_length_x / image_downscale_factor * down_x,
+                    c.focal_length_y / image_downscale_factor * down_y,
+                    c.width / image_downscale_factor * down_x,
+                    c.height / image_downscale_factor * down_y,
                 )
             )
         return torch.stack(intrinsics).float()
