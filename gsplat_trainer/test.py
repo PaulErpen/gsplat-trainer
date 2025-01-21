@@ -105,7 +105,7 @@ if __name__ == "__main__":
                             gt_image = gt_image.to("cuda")
                             gt_alpha = gt_alpha.to("cuda")
 
-                            bg_color = torch.ones((3,))
+                            bg_color = torch.ones((3,)).to("cuda")
                             bg_image = torch.ones_like(gt_image).to("cuda") * bg_color
 
                             gt_image = add_backround(gt_image, bg_image, gt_alpha)
