@@ -126,17 +126,17 @@ if __name__ == "__main__":
 
                             curr_psnr = psnr(
                                 out_img.permute(2, 0, 1), gt_image.permute(2, 0, 1)
-                            )
+                            ).detach().cpu()
                             curr_ssim = ssim(
                                 out_img.permute(2, 0, 1), gt_image.permute(2, 0, 1)
-                            )
+                            ).detach().cpu()
                             curr_lpips = lpips_alex(
                                 out_img.permute(2, 0, 1), gt_image.permute(2, 0, 1)
-                            )
+                            ).detach().cpu()
 
                             records_single.append(
                                 {
-                                    "model": model,
+                                    "model": method,
                                     "dataset": dataset,
                                     "size": size,
                                     "view_idx": idx,
