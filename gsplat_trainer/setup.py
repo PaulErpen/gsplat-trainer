@@ -18,5 +18,6 @@ setup(
         "matplotlib>=3.8.0",
         "libsvm-official==3.35.0"
         "pybrisque @ https://github.com/PaulErpen/pybrisque.git",
+        "scipy==1.11.4"
     ],
 )
