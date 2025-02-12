@@ -1,5 +1,7 @@
+from typing import Tuple
 from gsplat_trainer.eval.eval_dataloader import EvalDataLoader
 from gsplat_trainer.eval.eval_model_loader import EvalModelLoader
+from gsplat_trainer.eval.perturbed_dataset import PerturbedDataset
 from gsplat_trainer.image.image_util import add_backround
 from gsplat_trainer.metrics.lpips import LPIPS
 from gsplat_trainer.metrics.psnr import psnr
@@ -9,13 +11,15 @@ import pandas as pd
 import torch
 from brisque import BRISQUE
 
+
 class EvalHandler:
-    def __init__(self, data_dir: str, device: str) -> None:
+    def __init__(self, data_dir: str, device: str, n_pertubations: int) -> None:
         self.data_dir = data_dir
         self.device = device
         self.lpips = LPIPS(self.device)
         self.bg_color = torch.ones((3,)).to(self.device)
         self.brisque = BRISQUE()
+        self.n_pertubations = n_pertubations
 
     def compute_metrics_dataframe(self) -> pd.DataFrame:
         records_single = []
@@ -24,6 +28,9 @@ class EvalHandler:
             for dataset in ["truck", "room", "stump"]:
 
                 test_split = EvalDataLoader(self.data_dir, dataset).get_eval_split()
+                perturbed_dataset = PerturbedDataset(
+                    test_split, self.n_pertubations, trans_std=0.5
+                )
 
                 for method in [
                     "default",
@@ -55,47 +62,65 @@ class EvalHandler:
 
                             out_img = self.render(model, K, viewmat, H, W)
 
-                            curr_psnr = (
-                                psnr(
-                                    out_img.permute(2, 0, 1), gt_image.permute(2, 0, 1)
-                                )
-                                .detach()
-                                .cpu()
-                                .item()
-                            )
-                            curr_ssim = (
-                                ssim(
-                                    out_img.permute(2, 0, 1), gt_image.permute(2, 0, 1)
-                                )
-                                .detach()
-                                .cpu()
-                                .item()
-                            )
-                            curr_lpips = (
-                                self.lpips.compute_lpips(
-                                    out_img.permute(2, 0, 1), gt_image.permute(2, 0, 1)
-                                )
-                                .detach()
-                                .cpu()
-                                .item()
+                            curr_psnr, curr_ssim, curr_lpips = (
+                                self.compute_reference_metrics(gt_image, out_img)
                             )
                             brisque_score = self.brisque.get_score(
                                 out_img.detach().cpu().numpy()
                             )
 
-                            records_single.append(
-                                {
-                                    "model": method,
-                                    "dataset": dataset,
-                                    "size": size,
-                                    "view_idx": idx,
-                                    "psnr": curr_psnr,
-                                    "ssim": curr_ssim,
-                                    "lpips": curr_lpips,
-                                    "brisque": brisque_score,
-                                }
-                            )
+                            record = {
+                                "model": method,
+                                "dataset": dataset,
+                                "size": size,
+                                "view_idx": idx,
+                                "psnr": curr_psnr,
+                                "ssim": curr_ssim,
+                                "lpips": curr_lpips,
+                                "brisque": brisque_score,
+                            }
+
+                            for idx_perturbed in range(self.n_pertubations):
+                                perturbed_pose = perturbed_dataset.get_perturbed_pose(
+                                    idx, idx_perturbed
+                                )
+
+                                out_img = self.render(
+                                    model, K, perturbed_pose.to(self.device), H, W
+                                )
+                                brisque_score = self.brisque.get_score(
+                                    out_img.detach().cpu().numpy()
+                                )
+                                record[f"brisque_{idx_perturbed}"] = brisque_score
+
+                            records_single.append(record)
         return pd.DataFrame.from_records(records_single)
+
+    def compute_reference_metrics(
+        self, gt_image: torch.Tensor, out_img: torch.Tensor
+    ) -> Tuple[float, float, float]:
+        curr_psnr = (
+            psnr(out_img.permute(2, 0, 1), gt_image.permute(2, 0, 1))
+            .detach()
+            .cpu()
+            .item()
+        )
+        curr_ssim = (
+            ssim(out_img.permute(2, 0, 1), gt_image.permute(2, 0, 1))
+            .detach()
+            .cpu()
+            .item()
+        )
+        curr_lpips = (
+            self.lpips.compute_lpips(
+                out_img.permute(2, 0, 1), gt_image.permute(2, 0, 1)
+            )
+            .detach()
+            .cpu()
+            .item()
+        )
+
+        return curr_psnr, curr_ssim, curr_lpips
 
     def render(
         self,

@@ -10,6 +10,7 @@ import pandas as pd
 W, H = 32, 32
 N = 2
 
+
 class MockedNvsDataset(NVSDataset):
     def __init__(self) -> None:
         pass
@@ -19,7 +20,7 @@ class MockedNvsDataset(NVSDataset):
 
     def __getitem__(self, _idx) -> Tuple[torch.Tensor, torch.Tensor]:
         return (
-            torch.rand(3, 3),
+            torch.rand(4, 4),
             torch.rand(W, H, 3),
             torch.rand(W, H, 1),
             torch.rand(4, 4),
@@ -43,10 +44,10 @@ class EvalHandlerTest(unittest.TestCase):
         self.setup_mocks(MockEvalDataLoader, MockEvalModelLoader)
 
         df = EvalHandler(
-            "./nonexisten_unittest_dat_dir", "cpu"
+            "./nonexisten_unittest_dat_dir", "cpu", 2
         ).compute_metrics_dataframe()
 
-        self.assertEqual(df.shape, (63 * N, 8))
+        self.assertEqual(df.shape, (63 * N, 10))
         self.assertIsInstance(df, pd.DataFrame)
         self.assertEqual(df["view_idx"].dtype, "int64")
         self.assertEqual(df["psnr"].dtype, "float64")
