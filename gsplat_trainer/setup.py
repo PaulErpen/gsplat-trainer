@@ -16,6 +16,7 @@ setup(
         "pillow>=11.0.0",
         "torchvision>=0.20.1",
         "matplotlib>=3.8.0",
-        "pybrisque==1.0",
+        "libsvm-official==3.35.0"
+        "pybrisque @ https://github.com/PaulErpen/pybrisque.git",
     ],
 )
