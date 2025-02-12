@@ -23,6 +23,6 @@ if __name__ == "__main__":
 
     parsed_args = parser.parse_args()
 
-    EvalHandler(parsed_args.dataDir, "cuda").compute_metrics_dataframe().to_excel(
+    EvalHandler(parsed_args.dataDir, "cuda", 5).compute_metrics_dataframe().to_excel(
         parsed_args.singleDfPathXl
     )
