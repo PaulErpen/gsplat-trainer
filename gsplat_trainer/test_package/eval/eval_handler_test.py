@@ -46,7 +46,7 @@ class EvalHandlerTest(unittest.TestCase):
             "./nonexisten_unittest_dat_dir", "cpu"
         ).compute_metrics_dataframe()
 
-        self.assertEqual(df.shape, (63 * N, 7))
+        self.assertEqual(df.shape, (63 * N, 8))
         self.assertIsInstance(df, pd.DataFrame)
         self.assertEqual(df["view_idx"].dtype, "int64")
         self.assertEqual(df["psnr"].dtype, "float64")

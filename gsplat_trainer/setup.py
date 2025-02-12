@@ -15,6 +15,7 @@ setup(
         "plyfile>=1.1",
         "pillow>=11.0.0",
         "torchvision>=0.20.1",
-        "matplotlib>=3.8.0"
+        "matplotlib>=3.8.0",
+        "pybrisque==1.0",
     ],
 )

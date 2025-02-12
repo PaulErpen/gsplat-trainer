@@ -4,15 +4,18 @@ from gsplat_trainer.image.image_util import add_backround
 from gsplat_trainer.metrics.lpips import LPIPS
 from gsplat_trainer.metrics.psnr import psnr
 from gsplat_trainer.metrics.ssim import ssim
+from gsplat_trainer.model.gaussian_model import GaussianModel
 import pandas as pd
 import torch
-
+from brisque import BRISQUE
 
 class EvalHandler:
     def __init__(self, data_dir: str, device: str) -> None:
         self.data_dir = data_dir
         self.device = device
         self.lpips = LPIPS(self.device)
+        self.bg_color = torch.ones((3,)).to(self.device)
+        self.brisque = BRISQUE()
 
     def compute_metrics_dataframe(self) -> pd.DataFrame:
         records_single = []
@@ -42,26 +45,15 @@ class EvalHandler:
                             gt_image = gt_image.to(self.device)
                             gt_alpha = gt_alpha.to(self.device)
 
-                            bg_color = torch.ones((3,)).to(self.device)
                             bg_image = (
-                                torch.ones_like(gt_image).to(self.device) * bg_color
+                                torch.ones_like(gt_image).to(self.device)
+                                * self.bg_color
                             )
 
                             gt_image = add_backround(gt_image, bg_image, gt_alpha)
-
-                            sh_degree_to_use = 0
-
                             H, W, _ = gt_image.shape
-                            renders, alphas, info = model(
-                                view_matrix=viewmat.unsqueeze(0),
-                                K=K.unsqueeze(0),
-                                W=W,
-                                H=H,
-                                sh_degree_to_use=sh_degree_to_use,
-                                bg_color=bg_color.unsqueeze(0),
-                            )
 
-                            out_img = renders[0]
+                            out_img = self.render(model, K, viewmat, H, W)
 
                             curr_psnr = (
                                 psnr(
@@ -87,6 +79,9 @@ class EvalHandler:
                                 .cpu()
                                 .item()
                             )
+                            brisque_score = self.brisque.get_score(
+                                out_img.detach().cpu().numpy()
+                            )
 
                             records_single.append(
                                 {
@@ -97,6 +92,29 @@ class EvalHandler:
                                     "psnr": curr_psnr,
                                     "ssim": curr_ssim,
                                     "lpips": curr_lpips,
+                                    "brisque": brisque_score,
                                 }
                             )
         return pd.DataFrame.from_records(records_single)
+
+    def render(
+        self,
+        model: GaussianModel,
+        K: torch.Tensor,
+        viewmat: torch.Tensor,
+        H: int,
+        W: int,
+    ):
+        sh_degree_to_use = 0
+
+        renders, _alphas, _info = model(
+            view_matrix=viewmat.unsqueeze(0),
+            K=K.unsqueeze(0),
+            W=W,
+            H=H,
+            sh_degree_to_use=sh_degree_to_use,
+            bg_color=self.bg_color.unsqueeze(0),
+        )
+
+        out_img = renders[0]
+        return out_img
