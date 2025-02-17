@@ -37,6 +37,29 @@ class EvalModelLoaderTest(unittest.TestCase):
 
         os.unlink(GS_MODEL_PATH)
         shutil.rmtree(DATA_DIR)
+    
+    def test_given_an_extistent_model_in_the_sources__when_loading_the_model__then_return_the_model(
+        self,
+    ) -> None:
+        DATA_DIR = "./mocked_test_data"
+        METHOD = "mini-splatting"
+        DATASET = "truck"
+        SIZE = "low"
+        GS_MODEL_DIR = f"{DATA_DIR}/models/{METHOD}/mini_splatting-{DATASET}-{SIZE}-2/point_cloud/iteration_30000"
+        os.makedirs(GS_MODEL_DIR, exist_ok=True)
+        model = self.create_gaussian_model()
+        GS_MODEL_PATH = f"{GS_MODEL_DIR}/point_cloud.ply"
+        save_ply(
+            model,
+            GS_MODEL_PATH,
+        )
+        loaded_model = EvalModelLoader(
+            DATA_DIR, METHOD, SIZE, DATASET, "cpu"
+        ).get_model()
+        self.assertIsInstance(loaded_model, GaussianModel)
+
+        os.unlink(GS_MODEL_PATH)
+        shutil.rmtree(DATA_DIR)
 
     def create_gaussian_model(self, N=100, device="cpu") -> GaussianModel:
         return GaussianModel(

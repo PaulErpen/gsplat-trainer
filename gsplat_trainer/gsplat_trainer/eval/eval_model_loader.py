@@ -1,5 +1,7 @@
+from pathlib import Path
 from gsplat_trainer.model.gaussian_model import GaussianModel
 from gsplat_trainer.model_io.ply_handling import load_ply
+import pandas as pd
 
 
 class EvalModelLoader:
@@ -11,8 +13,19 @@ class EvalModelLoader:
         self.size = size
         self.dataset = dataset
         self.device = device
+        self.model_sources = pd.read_csv(
+            Path(*Path(__file__).resolve().parts[:-1]) / "eval.csv"
+        )
 
     def _get_model_path(self) -> str:
+        model_source = self.model_sources[
+            (self.model_sources["dataset_name"] == self.dataset)
+            & (self.model_sources["size"] == self.size)
+            & (self.model_sources["technique"] == self.method)
+        ]
+        if len(model_source) == 1 and not pd.isna(model_source["model_path"].iloc[0]):
+            return f"{self.data_dir}/{model_source['model_path'].iloc[0]}/point_cloud/iteration_30000/point_cloud.ply"
+
         if self.method in ["default", "mcmc"]:
             return f"{self.data_dir}/models/{self.method}/{self.method}-{self.dataset}-{self.size}-1/{self.method}-{self.dataset}-{self.size}-1_model.ply"
         elif self.method == "mini-splatting":
