@@ -58,9 +58,14 @@ class EvalHandler:
                             )
 
                             gt_image = add_backround(gt_image, bg_image, gt_alpha)
+                            gt_image = torch.clamp(gt_image, 0.0, 1.0)
                             H, W, _ = gt_image.shape
 
-                            out_img = self.render(model, K, viewmat, H, W)
+                            out_img = torch.clamp(
+                                self.render(model, K, viewmat, H, W),
+                                0.0,
+                                1.0,
+                            )
 
                             curr_psnr, curr_ssim, curr_lpips = (
                                 self.compute_reference_metrics(gt_image, out_img)
@@ -85,8 +90,12 @@ class EvalHandler:
                                     idx, idx_perturbed
                                 )
 
-                                out_img = self.render(
-                                    model, K, perturbed_pose.to(self.device), H, W
+                                out_img = torch.clamp(
+                                    self.render(
+                                        model, K, perturbed_pose.to(self.device), H, W
+                                    ),
+                                    0.0,
+                                    1.0,
                                 )
                                 brisque_score = self.brisque.get_score(
                                     out_img.detach().cpu().numpy()
